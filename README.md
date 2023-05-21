@@ -8,7 +8,7 @@ This is a React project created with Vite.
 2. Clone repository yang sudah di fork ke local machine kalian
 
 ```bash
-  git clone
+  git clone <url-repository>
 ```
 
 3. Install dependencies
@@ -37,7 +37,7 @@ This is a React project created with Vite.
 
 ```bash
   git add .
-  git commit -m "My commit message"
+  git commit -m "My commit message" <-- ganti dengan commit message yang jelas
 ```
 
 9. Push perubahan ke remote branch 
@@ -46,7 +46,7 @@ This is a React project created with Vite.
   git push origin my-new-branch
 ```
 
-9. Open a pull request to the `development` branch
+10. Open a pull request to the `development` branch
 
 
 ## Pull Requests
