@@ -1,3 +1,5 @@
+import Input from "../../components/input";
+
 const RegisterPage = () => {
   return (
 <section className="bg-white">
