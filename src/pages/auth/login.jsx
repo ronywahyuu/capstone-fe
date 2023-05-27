@@ -2,7 +2,7 @@ const LoginPage = () => {
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-        <img src="./public/logo.svg" alt="Logo Toghetherboost Apps" className="ml-28 mb-6" />
+        <img src="./logo.svg" alt="Logo Toghetherboost Apps" className="ml-28 mb-6" />
         <div className="mx-auto max-w-lg text-center">
           <h1 className="text-2xl font-bold sm:text-5xl">Selamat Datang!</h1>
         </div>
@@ -58,7 +58,7 @@ const LoginPage = () => {
       </div>
 
       <div className="relative bg-cyan-500 h-64 w-full sm:h-96 lg:h-full lg:w-1/2 flex flex-col justify-center items-center">
-        <img alt="Welcome" src="./public/lives-matter.png" className="absolute inset-0 object-cover" />
+        <img alt="Welcome" src="./lives-matter.png" className="absolute inset-0 object-cover" />
         <p className="mt-64 text-white text-center text-2xl font-bold sm:text-6xl">Berbagi donasi untuk bantu pendidikan!</p>
       </div>
     </section>
