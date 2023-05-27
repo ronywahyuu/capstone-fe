@@ -9,6 +9,8 @@ import MainLayout from './pages/main-layout.jsx'
 import LandingPage from './pages/landing-page.jsx'
 import RegisterPage from './pages/auth/register.jsx'
 import AboutPage from './pages/about.jsx'
+import BlogPage from './pages/blog-page.jsx'
+import MainPage from './pages/main-page.jsx'
 
 const router = createBrowserRouter([
   {
@@ -23,16 +25,16 @@ const router = createBrowserRouter([
         path: 'about',
         element: <AboutPage/>
       },
-      {
-        path: 'login',
-        element: <LoginPage/>
-      },
-      {
-        path: 'register',
-        element: <RegisterPage/>
-      }
     ],
     errorElement: <ErrorPage/>
+  },
+  {
+    path: '/login',
+    element: <LoginPage/>,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage/>,
   },
   {
     path: 'home',
@@ -40,11 +42,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'timeline',
-        element: <div>Halaman Donasi</div>
+        element: <MainPage/>
+      },
+      // detail
+      {
+        path: 'timeline/:id',
+        element: <div>Halaman Detail</div>
       },
       {
         path: 'blog',
-        element: <div>Halaman Blog</div>
+        element: <MainPage/>
+      },
+      {
+        path: 'saved',
+        element: <MainPage/>
       }
     ]
   }
