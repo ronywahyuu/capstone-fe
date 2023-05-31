@@ -1,6 +1,6 @@
 # Capstone Project
 
-This is a React project created with Vite.
+Link Repository untuk Backend : https://github.com/ronywahyuu/capstone-be
 
 ## Getting Started
 
