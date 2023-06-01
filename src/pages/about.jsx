@@ -51,6 +51,7 @@ const AboutPage = () => {
       </section>
     </>
   )
-}
+};
 
-export default AboutPage
+
+export default AboutPage;
