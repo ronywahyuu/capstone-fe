@@ -1,79 +1,85 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Tabbed from "../components/tabbed";
-// import axios from "axios";
-import ContentPage from "../components/home/content";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ButtonToUp from "../components/utils/button-up";
-// import ProfileCard from "../components/home/profile-card";
-// import API_ENDPOINT from "../config/api-endpoint";
-
+import ProfileCard from "../components/home/profile-card";
+import useDonasiList from "../hooks/useDonasiList";
+import PostCard from "../components/home/post-card";
+import useBlogList from "../hooks/useBlogList";
+import useGetUser from "../hooks/useGetUser";
 const MainPage = () => {
   const [forYou, setForYou] = useState(true);
-  // const [posts, setPosts] = useState([]);
-
-  // const fetchDonasi = async () => {
-  //   try {
-  //     const res = await axios.get("http://localhost:3000/api/v1/posts");
-  //     // wait 3 seconds time out
-  //     setPosts(res.data.posts);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchDonasi();
-  // }, []);
-
-  // const renderPosts = posts?.map((post, index) => {
-  //   return (
-  //     <>
-  //       <Suspense fallback={<div>Loading...</div>}>
-  //         <ContentPage key={index} content={post.title} />
-  //       </Suspense>
-  //     </>
-  //   );
-  // });
-
-  // console.log(renderPosts);
-
-  // get url with react router dom
+  const [showButton, setShowButton] = useState(false);
   const { pathname } = useLocation();
 
-  console.log(pathname);
-
-  const donasiPage = pathname === "/home/timeline" && (
-    <ContentPage
-      content={
-        forYou ? "postingan donasi untuk anda" : "Postingan donasi milik anda"
-      }
-    />
+  // ==================== API query for donasi data ====================
+  // **
+  // **
+  const { data: myDonasi } = useDonasiList(
+    "myDonasi",
+    JSON.parse(localStorage.getItem("auth_user"))?.id
   );
+  const yourDonasi = myDonasi?.data?.posts;
 
-  const blogPage = pathname === "/home/blog" && (
-    <ContentPage
-      content={
-        forYou ? "postingan blog untuk anda" : "Postingan blog milik anda"
-      }
-    />
+  const { data: donasi } = useDonasiList("donasi");
+  const posts = donasi?.data?.posts;
+
+  // ==================== API query for blog data ====================
+  // **
+  // **
+  const { data: blogs } = useBlogList("blogs");
+  const allBlogs = blogs?.data?.blogs;
+
+  const { data: myBlog } = useBlogList(
+    "myBlog",
+    JSON.parse(localStorage.getItem("auth_user"))?.id
   );
+  const yourBlog = myBlog?.data?.blogs;
 
-  const savedPage = pathname === "/home/saved" && (
-    <ContentPage
-      content={
-        forYou
-          ? "postingan tersimpan untuk anda"
-          : "Postingan tersimpan milik anda"
-      }
-    />
+  // ==================== API query for saved data ====================
+  // **
+  // **
+  const { data: savedDonasiData } = useGetUser(
+    JSON.parse(localStorage.getItem("auth_user"))?.id,
+    "savedDonasiData"
   );
+  const savedPosts = savedDonasiData?.savedPost
+  // const {data: savedBlog} = useGetUser(localStorage.getItem("auth_user")?.id, "savedBlog")
 
-  const renderTabIfNotInSavedPage = donasiPage || blogPage;
+  // ==================== mapping content berdasarkan role ====================
+  // **
+  // **
+  const renderDonasi = forYou
+    ? posts?.map((post) => <PostCard key={post.id} content={post} />)
+    : yourDonasi?.map((post) => <PostCard key={post.id} content={post} />);
 
-  const renderPage = donasiPage || blogPage || savedPage;
+  const renderBlog = forYou
+    ? allBlogs?.map((post) => <PostCard key={post.id} content={post} />)
+    : yourBlog?.map((post) => <PostCard key={post.id} content={post} />);
 
-  // show button to up if scroll down
-  const [showButton, setShowButton] = useState(false);
+    // const renderSaved = <div>af</div>
+  const renderSaved = forYou 
+    ? savedPosts?.map((post) => <PostCard key={post.id} content={post} />)
+    : savedPosts?.map((post) => <PostCard key={post.id} content={post} />);
+  // ==================== render content berdasarkan pathname pada url ====================
+  // **
+  // **
+  const donasiPage = pathname === "/home/timeline" && renderDonasi;
+  const blogPage = pathname === "/home/blog" && renderBlog;
+  const savedPage = pathname === "/home/saved" && renderSaved;
+
+  // ==================== render tabbed component berdasarkan pathname pada url ====================
+  // **
+  // **
+  // const renderTabIfNotInSavedPage = donasiPage || blogPage;
+
+  // ==================== render page berdasarkan pathname pada url ====================
+  // **
+  const renderPage = () => {
+    if (donasiPage) return donasiPage;
+    if (blogPage) return blogPage;
+    if (savedPage) return savedPage;
+  };
 
   const handleScroll = useCallback(() => {
     const position = window.pageYOffset;
@@ -83,6 +89,17 @@ const MainPage = () => {
       setShowButton(false);
     }
   }, [setShowButton]);
+
+  const generateTextBtn = () => {
+    switch (pathname) {
+      case "/home/timeline":
+        return "Buat Donasi";
+      case "/home/blog":
+        return "Tulis Blog";
+      default:
+        return "Buat Donasi";
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -94,17 +111,39 @@ const MainPage = () => {
   return (
     <div className="relative">
       <div className="px-10 py-5  bg-gray-50 ">
-        {/* tab component */}
-        {/* <Tabbed forYou={forYou} setForYou={setForYou} /> */}
-        {renderTabIfNotInSavedPage && (
-          <Tabbed forYou={forYou} setForYou={setForYou} />
+        {location.pathname !== "/home/saved" && (
+          <Tabbed
+            forYou={forYou}
+            setForYou={setForYou}
+            text1="Untuk Anda"
+            text2="Milik Anda"
+          />
+        )}
+
+        {location.pathname === "/home/saved" && (
+          <Tabbed
+            forYou={forYou}
+            setForYou={setForYou}
+            text1="Donasi"
+            text2="Blog"
+          />
         )}
 
         {/* main content */}
-        {renderPage}
-        {/* <div className="grid">
+        <div className="grid grid-cols-4 gap-5 items-start">
+          <div className=" col-span-4 md:col-span-3">
+            {pathname !== "/home/saved" && (
+              <Link to={`${pathname}/write`}>
+                <button className="w-full mt-5 bg-[#104891] px-4 py-2 rounded-md text-white">
+                  + {generateTextBtn()}
+                </button>
+              </Link>
+            )}
+            {renderPage()}
+            {/* <div>404</div> */}
+          </div>
           <ProfileCard />
-        </div> */}
+        </div>
       </div>
       {showButton && <ButtonToUp />}
     </div>

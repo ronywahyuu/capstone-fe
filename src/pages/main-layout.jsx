@@ -2,17 +2,26 @@ import { Outlet, useLocation } from "react-router-dom";
 import SideMenu from "../components/side-menu";
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
+import useGetUser from "../hooks/useGetUser";
 
 const MainLayout = () => {
+  // ====================== state ======================
   const [offCanvas, setOffCanvas] = useState(false);
-
-  // throw user to home/timeline if user types /home
   const { pathname } = useLocation();
 
   if (pathname === "/home") {
     window.location.href = "/home/timeline";
   }
 
+  // ====================== hooks ======================
+  const { data: user, error } = useGetUser(JSON.parse(localStorage.getItem("auth_user"))?.id, "authenticatedUser");
+
+  if (error) {
+    return <h1>error</h1>;
+  }
+
+
+  // console.log(user)
   return (
     <main className="flex ">
       <SideMenu offCanvas={offCanvas} setOffCanvas={setOffCanvas} />
@@ -29,7 +38,8 @@ const MainLayout = () => {
               />
             )}
             <h3 className="font-semibold text-base md:text-2xl">
-              Selamat Datang, John!
+              {user ? `Selamat Datang, ${user?.name}!` : `Selamat Datang!`}
+              {/* Selamat Datang, {isLoading ? "" : user?.name}! */}
             </h3>
           </div>
 

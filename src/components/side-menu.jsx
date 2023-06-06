@@ -1,12 +1,16 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BiBookmark } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
 import { TfiWrite } from "react-icons/tfi";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { BiLogOutCircle } from "react-icons/bi";
+
 import PropTypes from "prop-types";
 import { useEffect } from "react";
+import USER_API from "../api/user-api";
 
 const SideMenu = ({ offCanvas, setOffCanvas }) => {
+  const navigate = useNavigate();
   const responsiveBreakpoint = {
     sm: "375px",
     md: "768px",
@@ -33,13 +37,19 @@ const SideMenu = ({ offCanvas, setOffCanvas }) => {
   const navLinkInactive =
     "flex text-white items-center gap-2 rounded-lg hover:bg-gray-100 hover:text-gray-700 px-4 py-2 text-gray-700";
 
+  const logout = () => {
+    localStorage.removeItem("auth_user");
+    USER_API.logoutFn();
+    navigate("/login");
+  };
+
   return (
     <div
       className={`flex h-screen  bg-gray-800 flex-col justify-between border-e  transition duration-200 top-0 bottom-0 left-0 md:w-1/5  ${offCanvasClass}`}
     >
       <div className="px-4 py-6 sticky top-0  ">
         <div className="flex items-center justify-between">
-          <Link to="/home/timeline" className="">
+          <Link to="/" className="">
             <img src="/logo.svg" width="80px" className="" alt="" />
           </Link>
           <RxHamburgerMenu
@@ -82,6 +92,11 @@ const SideMenu = ({ offCanvas, setOffCanvas }) => {
             <BiBookmark />
             <span className="text-lg font-medium"> Disimpan </span>
           </NavLink>
+
+          <button onClick={logout} className="flex text-white items-center gap-2 rounded-lg hover:bg-gray-100 hover:text-gray-700 px-4 py-2 ">
+            <BiLogOutCircle/>
+            <span className="text-lg font-medium"> Sign Out </span>
+          </button>
         </nav>
       </div>
 
