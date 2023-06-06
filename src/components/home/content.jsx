@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 // import ProfileCard from "./profile-card";
 import PostCard from "./post-card";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import API_ENDPOINT from "../../globals/api-endpoint";
 const ContentPage = ({ content }) => {
   const { pathname } = useLocation();
@@ -17,39 +17,20 @@ const ContentPage = ({ content }) => {
     }
   };
 
-  const api = API_ENDPOINT
+  const api = API_ENDPOINT;
   console.log(api.SINGLE_DONASI(1));
 
   return (
-    <div className=" ">
+    <div className=" col-span-3">
       {/*  */}
       {pathname !== "/home/saved" && (
-        <button className=" mt-5 bg-[#015A5F] px-4 py-2 rounded-md text-white">
-          + {generateTextBtn()}
-        </button>
+        <Link to={`${pathname}/write`}>
+          <button className="w-full mt-5 bg-[#104891] px-4 py-2 rounded-md text-white">
+            + {generateTextBtn()}
+          </button>
+        </Link>
       )}
       <div>
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
-        <PostCard content={content} />
         <PostCard content={content} />
       </div>
     </div>
