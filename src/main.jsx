@@ -11,8 +11,8 @@ import RegisterPage from './pages/auth/register.jsx'
 import AboutPage from './pages/about.jsx'
 import BlogPage from './pages/blog-page.jsx'
 import MainPage from './pages/main-page.jsx'
+import DetailPage from './pages/detail-page.jsx'
 import FormDonasi from './components/home/write.jsx'
-
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
@@ -53,8 +53,8 @@ const router = createBrowserRouter([
       },
       // detail
       {
-        path: "timeline/:id",
-        element: <div>Halaman Detail</div>,
+        path: 'timeline/:id',
+        element: <DetailPage/>
       },
       {
         path: "blog",
