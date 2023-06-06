@@ -11,6 +11,7 @@ import RegisterPage from './pages/auth/register.jsx'
 import AboutPage from './pages/about.jsx'
 import BlogPage from './pages/blog-page.jsx'
 import MainPage from './pages/main-page.jsx'
+import FormDonasi from './components/home/write.jsx'
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: 'saved',
         element: <MainPage/>
+      },
+      {
+        path: 'donasi',
+        element: <FormDonasi/>
       }
     ]
   }
