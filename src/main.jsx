@@ -12,38 +12,44 @@ import AboutPage from './pages/about.jsx'
 import BlogPage from './pages/blog-page.jsx'
 import MainPage from './pages/main-page.jsx'
 import DetailPage from './pages/detail-page.jsx'
+import FormDonasi from './components/home/write.jsx'
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App/>,
+    path: "/",
+    element: <App />,
     children: [
       {
-        path: '/',
-        element: <LandingPage/>
+        path: "/",
+        element: <LandingPage />,
       },
       {
-        path: 'about',
-        element: <AboutPage/>
+        path: "about",
+        element: <AboutPage />,
       },
     ],
-    errorElement: <ErrorPage/>
+    errorElement: <ErrorPage />,
   },
   {
-    path: '/login',
-    element: <LoginPage/>,
+    path: "/login",
+    element: <LoginPage />,
   },
   {
-    path: '/register',
-    element: <RegisterPage/>,
+    path: "/register",
+    element: <RegisterPage />,
   },
   {
-    path: 'home',
-    element : <MainLayout/>,
+    path: "home",
+    element: <MainLayout />,
     children: [
       {
-        path: 'timeline',
-        element: <MainPage/>
+        path: "timeline",
+        element: <MainPage />,
+      },
+      {
+        path: "timeline/write",
+        element: <WritePost />,
       },
       // detail
       {
@@ -51,19 +57,25 @@ const router = createBrowserRouter([
         element: <DetailPage/>
       },
       {
-        path: 'blog',
-        element: <MainPage/>
+        path: "blog",
+        element: <MainPage />,
       },
       {
         path: 'saved',
         element: <MainPage/>
+      },
+      {
+        path: 'donasi',
+        element: <FormDonasi/>
       }
     ]
   }
 ])
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router}/>
-  </React.StrictMode>,
-)
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
+);
