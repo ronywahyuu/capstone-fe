@@ -11,6 +11,7 @@ import RegisterPage from './pages/auth/register.jsx'
 import AboutPage from './pages/about.jsx'
 import BlogPage from './pages/blog-page.jsx'
 import MainPage from './pages/main-page.jsx'
+import DetailPage from './pages/detail-page.jsx'
 
 const router = createBrowserRouter([
   {
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
       // detail
       {
         path: 'timeline/:id',
-        element: <div>Halaman Detail</div>
+        element: <DetailPage/>
       },
       {
         path: 'blog',
