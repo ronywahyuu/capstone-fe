@@ -4,6 +4,7 @@ import {persist, createJSONStorage} from 'zustand/middleware'
 const useStore = create((set) => ({
   authUser: null,
   loading: false,
+  message: null,
   setAuthUser: (user) =>
     set((state) => ({
       ...state,
