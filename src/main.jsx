@@ -47,10 +47,6 @@ const router = createBrowserRouter([
         path: "timeline",
         element: <MainPage />,
       },
-      {
-        path: "timeline/write",
-        element: <WritePost />,
-      },
       // detail
       {
         path: 'timeline/:id',
@@ -65,7 +61,7 @@ const router = createBrowserRouter([
         element: <MainPage/>
       },
       {
-        path: 'donasi',
+        path: 'timeline/write',
         element: <FormDonasi/>
       }
     ]

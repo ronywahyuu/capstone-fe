@@ -1,6 +1,5 @@
 import axios from "axios";
 import API_ENDPOINT from "../globals/api-endpoint";
-
 const USER_API = {
   getUserFn : async (id) => {
     try {

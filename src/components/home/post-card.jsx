@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
-import { BsBookmark } from "react-icons/bs";
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
 
 const PostCard = ({ content }) => {
   const location = useLocation();
-  const savedLocation = location.pathname.includes("saved");
-  console.log(content)
+
+  const savedLocation = location.pathname === "/home/saved";
+  const tabDonasi = content?.post;
+  const tabBlog = content?.blog;
   const {
     title,
     description,
@@ -17,7 +18,7 @@ const PostCard = ({ content }) => {
     commentsCount,
   } = content;
   const createdDate = new Date(
-    savedLocation ? content?.post.createdAt : createdAt
+    savedLocation ? tabDonasi.createdAt || tabBlog.createdAt : createdAt
   ).toLocaleDateString("id-ID", {
     weekday: "long",
     year: "numeric",
@@ -29,7 +30,7 @@ const PostCard = ({ content }) => {
   // const { avatarImg, name } = author;
 
   return (
-    <article className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm my-6 ">
+    <article  id={content.id} className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm my-6 ">
       <div className="p-4 sm:p-6 ">
         <div className="flex  relative">
           {location.pathname !== "/home/saved" && (
@@ -41,9 +42,9 @@ const PostCard = ({ content }) => {
           )}
 
           <div>
-            <h1 className="text-lg font-medium text-gray-900">{
-              savedLocation ? content?.post.title : title
-            }</h1>
+            <h1 className="text-lg font-medium text-gray-900">
+              {savedLocation ? tabDonasi.title || tabBlog.title : title}
+            </h1>
             <p className="text-xs font-normal text-gray-400">
               {/* Jumat, 12 Desember 2012 */}
               {createdDate}
@@ -53,13 +54,12 @@ const PostCard = ({ content }) => {
             </span>
           </div>
 
-          <BsBookmark className="absolute right-0 text-xl" />
         </div>
         <div>
           <p className="my-4 line-clamp-3 text-sm/relaxed text-gray-500 ">
-            {
-              savedLocation ? content?.post.description : description
-            }
+            {savedLocation
+              ? tabDonasi.description || tabBlog.description
+              : description}
           </p>
 
           {bannerImg && (
@@ -82,7 +82,7 @@ const PostCard = ({ content }) => {
               </div>
             </div>
             <Link
-              to="/home/timeline/12"
+              to={`/home/timeline/${content.id}`}
               className="block bg-cyan-500 px-5 py-3 text-center text-xs font-bold uppercase text-white transition hover:bg-cyan-700"
             >
               Read More

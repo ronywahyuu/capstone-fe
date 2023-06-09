@@ -1,18 +1,27 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import USER_API from "../../api/user-api";
 import useStore from "../../store";
+import { yupResolver } from "@hookform/resolvers/yup";
+import INPUT_VALIDATOR from "../../utils/validator";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LoginPage = () => {
   const store = useStore();
 
   const navigate = useNavigate();
-
+  const notifyError = () => toast.error("Login Failed",{
+    autoClose: 1000,
+    closeOnClick: true,
+  });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(INPUT_VALIDATOR.loginDataSchema),
+  });
 
   // API login Mutation
   const { mutate: loginUser, isLoading } = useMutation(
@@ -22,11 +31,13 @@ const LoginPage = () => {
         store.setLoading(true);
       },
       onSuccess: async (data) => {
+        console.log(data);
         store.setLoading(false);
         localStorage.setItem("auth_user", JSON.stringify(data.data.user));
         navigate("/home/timeline");
       },
       onError: (error) => {
+        notifyError();
         store.setLoading(false);
         console.log(error);
       },
@@ -38,6 +49,7 @@ const LoginPage = () => {
   };
 
   return (
+    <>
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
         <img
@@ -63,9 +75,7 @@ const LoginPage = () => {
                 type="email"
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Masukan email"
-                {...register("email", {
-                  required: "Email tidak boleh kosong",
-                })}
+                {...register("email")}
               />
               {errors.email && (
                 <span className="text-red-600">{errors.email.message}</span>
@@ -100,9 +110,7 @@ const LoginPage = () => {
                 type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Masukan password"
-                {...register("password", {
-                  required: "Password tidak boleh kosong",
-                })}
+                {...register("password")}
               />
               {errors.password && (
                 <span className="text-red-600">{errors.password.message}</span>
@@ -138,7 +146,7 @@ const LoginPage = () => {
               type="submit"
               className="inline-block w-full rounded-lg bg-cyan-500 px-5 py-3 text-sm font-medium text-white"
             >
-              {isLoading ? "Loading..." : "Login"}
+              {isLoading ? <span className="text-xs">Loading...</span> : "Login"}
             </button>
           </div>
           <div className="">
@@ -147,12 +155,12 @@ const LoginPage = () => {
             </p>
           </div>
           <div className="flex items-center justify-between">
-            <button
+            <Link to="/register"
               type="submit"
-              className="inline-block w-full rounded-lg bg-slate-700 px-5 py-3 font-medium text-white "
+              className="inline-block text-center w-full rounded-lg bg-slate-700 px-5 py-3 font-medium text-white "
             >
               Daftar
-            </button>
+            </Link>
           </div>
         </form>
       </div>
@@ -168,6 +176,8 @@ const LoginPage = () => {
         </p>
       </div>
     </section>
+    <ToastContainer />
+    </>
   );
 };
 export default LoginPage;

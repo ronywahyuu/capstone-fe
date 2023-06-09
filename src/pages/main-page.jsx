@@ -44,6 +44,13 @@ const MainPage = () => {
     "savedDonasiData"
   );
   const savedPosts = savedDonasiData?.savedPost
+  // console.log(savedPosts)
+
+  const { data: savedBlogData } = useGetUser(
+    JSON.parse(localStorage.getItem("auth_user"))?.id,
+    "savedBlogData"
+  );
+  const savedBlogs = savedBlogData?.savedBlog
   // const {data: savedBlog} = useGetUser(localStorage.getItem("auth_user")?.id, "savedBlog")
 
   // ==================== mapping content berdasarkan role ====================
@@ -60,7 +67,7 @@ const MainPage = () => {
     // const renderSaved = <div>af</div>
   const renderSaved = forYou 
     ? savedPosts?.map((post) => <PostCard key={post.id} content={post} />)
-    : savedPosts?.map((post) => <PostCard key={post.id} content={post} />);
+    : savedBlogs?.map((post) => <PostCard key={post.id} content={post} />);
   // ==================== render content berdasarkan pathname pada url ====================
   // **
   // **

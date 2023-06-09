@@ -1,83 +1,285 @@
-import { MdFavoriteBorder, MdTurnedInNot, MdChatBubbleOutline, MdOutlineShare, MdSend } from "react-icons/md";
+import {
+  MdFavoriteBorder,
+  MdTurnedInNot,
+  MdBookmark,
+  MdOutlineShare,
+  MdSend,
+  MdFavorite
+} from "react-icons/md";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
+import API_ENDPOINT from "../globals/api-endpoint";
+import Comment from "../components/home/comment";
+import { useState } from "react";
+import useFetch from "../hooks/useFetch";
 
-const DetailPage = ({ content }) => {
+const DetailPage = () => {
+  const params = useParams();
+  const [commentText, setCommentText] = useState("");
+
+  const queryClient = useQueryClient();
+
+  // ambil id user dari local storage
+  const userId = JSON.parse(localStorage.getItem("auth_user")).id;
+  // get saved by current user
+  const {data: getSavedData} = useFetch("getSavedCurrentUser", () =>
+    axios.get("http://localhost:3000/api/v1/saved?userId=" + userId, {
+      withCredentials: true,
+    })
+  );
+
+  // get likes by current user
+  const {data: getLikesDataByCurrentUser} = useFetch("getLikesCurrentUser", () =>
+    axios.get("http://localhost:3000/api/v1/likes/donasi?userId=" + userId, {
+      withCredentials: true,
+    })
+  );
+
+  // compare saved data with current post
+  const isSaved = getSavedData?.data?.data?.some(
+    (saved) => saved.postId === params.id
+  );
+
+  // compare likes data with current post
+  const isLiked = getLikesDataByCurrentUser?.data?.like?.some(
+    (like) => like.postId === params.id
+  );
+
+  console.log({ isLiked });
+
+  const { mutate: addComment, isLoading: isLoadingAddComment } = useMutation(
+    (payload) =>
+      axios.post(API_ENDPOINT.CREATE_COMMENT, payload, {
+        withCredentials: true,
+      }),
+    {
+      onSuccess: () => {
+        setCommentText("");
+        queryClient.invalidateQueries("getComments");
+      },
+      onError: () => {
+        console.log("error");
+      },
+    }
+  );
+
+
+  // mutation untuk bookmark post
+  const { mutate: bookMarkPost } = useMutation(
+    (payload) =>
+      axios.post(API_ENDPOINT.CREATE_BOOKMARK_DONASI, payload, {
+        withCredentials: true,
+      }),
+    {
+      onSuccess: () => {
+        console.log("success");
+        queryClient.invalidateQueries("getBookmarks");
+        queryClient.invalidateQueries("getSavedCurrentUser");
+      },
+    }
+  );
+
+  // mutation untuk batal bookmark post
+  const { mutate: unBookMarkPost } = useMutation(
+    () =>
+      axios.delete("http://localhost:3000/api/v1/saved", {
+        withCredentials: true,
+        data: {
+          userId: JSON.parse(localStorage.getItem("auth_user")).id,
+          postId: params.id,
+        },
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getBookmarks");
+        queryClient.invalidateQueries("getSavedCurrentUser");
+      },
+      onError: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
+  // mutation untuk like post
+  const { mutate: likePost } = useMutation(
+    (payload) =>
+      axios.post("http://localhost:3000/api/v1/likes/donasi", payload, {
+        withCredentials: true,
+      }),
+    {
+      onSuccess: () => {
+        console.log("success");
+        queryClient.invalidateQueries("getLikesCurrentUser");
+      },
+    }
+  );
+
+  // mutation untuk unlike post
+  const { mutate: unlikePost } = useMutation(
+    () =>
+      axios.delete("http://localhost:3000/api/v1/likes/donasi", {
+        withCredentials: true,
+        data: {
+          userId: JSON.parse(localStorage.getItem("auth_user")).id,
+          postId: params.id,
+        },
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getLikesCurrentUser");
+      },
+      onError: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
+  // fungsi untuk memasukkan post ke bookmark
+  const handleBookmark = () => {
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("auth_user")).id,
+      postId: params.id,
+    };
+
+    // ini untuk memanggil function mutation
+    bookMarkPost(payload);
+  };
+
+  // fungsi untuk menghapus post dari bookmark
+  const handleUnBookmark = () => {
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("auth_user")).id,
+      postId: params.id,
+    };
+
+    // ini untuk memanggil function mutation dari unbookmark
+    unBookMarkPost(payload);
+  };
+
+  // get detail post
+  const { isLoading, data } = useQuery("getSingleDonasi", () =>
+    axios.get(API_ENDPOINT.SINGLE_DONASI(params.id))
+  );
+
+  // jangan tampilkan apapun jika loading
+  if (isLoading) return;
+
+  const { title, createdAt, description, bannerImg } = data.data.post;
+  const createdDate = new Date(createdAt).toLocaleDateString("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const { name, avatarImg } = data.data.post.author;
+
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    const payload = {
+      comment: commentText,
+      postId: params.id,
+    };
+    addComment(payload);
+  };
+
+  const handleLike = () => {
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("auth_user")).id,
+      postId: params.id,
+    };
+    likePost(payload);
+  };
+
+  const handleUnlike = () => {
+    const payload = {
+      userId: JSON.parse(localStorage.getItem("auth_user")).id,
+      postId: params.id,
+    };
+    unlikePost(payload);
+  };
+
   return (
-    <article>
-    <div className="p-4 sm:p-6 flex">
-    <img
-      className="h-16 w-16 object-cover rounded-full mr-4"
-      alt="Photo Profile"
-      src="../../public/profile.png"
-    />
-    <div>
-      <h1 className="text-lg font-medium text-gray-900">{content}</h1>
-      <h2 className="text-lg font-semibold text-gray-900">
-        John Doe
-      </h2>
-      <h3 className="text-xs font-normal text-gray-400">
-        Jumat, 12 Desember 2012
-      </h3>
+    <article className="">
+      <div className="p-6 md:py-10 md:px-20 flex">
+        <img
+          className="h-16 w-16 object-cover rounded-full mr-4"
+          alt="Photo Profile"
+          src={avatarImg}
+        />
+        <div>
+          <h1 className="text-lg font-medium text-gray-900">{title}</h1>
+          <h2 className="text-md font-normal text-gray-600">
+            Diposting oleh: {name}
+          </h2>
+          <h3 className="text-xs font-normal text-gray-400">{createdDate}</h3>
 
-      <p className="my-4 line-clamp-3 text-sm/relaxed text-gray-500">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-        dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-        sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-        voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-        Molestias explicabo corporis voluptatem?
-      </p>
+          <p className="my-4  text-sm/relaxed text-gray-500">{description}</p>
 
-      <img className="h-56 w-full object-cover" alt="" src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"/>
-    </div>
-  </div>
-  <div className="p-4 ml-16 sm:p-6 flex gap-6">
-    <MdFavoriteBorder className="text-2xl transform motion-safe:hover:scale-110" />
-    <MdChatBubbleOutline className="text-2xl transform motion-safe:hover:scale-110" />
-    <MdOutlineShare className="text-2xl transform motion-safe:hover:scale-110" />
-    <MdTurnedInNot className="text-2xl transform motion-safe:hover:scale-110" />
-  </div>
+          {bannerImg && (
+            <img
+              className="h-56 w-full object-cover rounded-md"
+              alt=""
+              src={bannerImg}
+            />
+          )}
+        </div>
+      </div>
+      <div className="p-4 ml-16 sm:p-6 flex gap-6">
+        {isLiked ? (
+          <MdFavorite
+            onClick={handleUnlike}
+            className="cursor-pointer text-red-700 text-2xl transform motion-safe:hover:scale-110"
+          />
+          // <span onClick={handleUnlike}>Liked</span>
+        ) : (
+          <MdFavoriteBorder
+            onClick={handleLike}
+            className="cursor-pointer text-2xl transform motion-safe:hover:scale-110"
+          />
+        )}
+        {isSaved ? (
+          <span
+            className="cursor-pointer  text-2xl transform motion-safe:hover:scale-110"
+            onClick={handleUnBookmark}
+          >
+            <MdBookmark />
+          </span>
+        ) : (
+          <MdTurnedInNot
+            onClick={handleBookmark}
+            className="cursor-pointer text-2xl transform motion-safe:hover:scale-110"
+          />
+        )}
+        <MdOutlineShare className="text-2xl transform motion-safe:hover:scale-110" />
+      </div>
 
-  <div className="p-4 ml-16 sm:p-6 flex">
-    <img
-      className="h-12 w-12 object-cover rounded-full mr-4"
-      alt="Photo Profile"
-      src="../../public/profile.png"
-    />
-    <div className="flex">
-        <input
+      <form onSubmit={handleAddComment} className="p-4 ml-16 sm:p-6 flex ">
+        <img
+          className="h-12 w-12 object-cover rounded-full mr-4"
+          alt="Photo Profile"
+          src="../../public/profile.png"
+        />
+        <div className="flex">
+          <input
             type="text"
             id="UserComment"
             placeholder="Masukan komentar Anda"
             className="mt-1 ml-1.5 w-96 h-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-        />
-        <MdSend className="text-3xl ml-5 mt-3 transform motion-safe:hover:scale-110" />
-    </div>
-  </div>
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="text-3xl ml-5 mt-3 transform motion-safe:hover:scale-110"
+          >
+            {isLoadingAddComment ? "Loading..." : <MdSend />}
+          </button>
+        </div>
+      </form>
 
-  <section className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm mx-40">
-  <div className="p-4 sm:p-6 flex">
-    <img
-      className="h-12 w-12 object-cover rounded-full mr-4"
-      alt="Photo Profile"
-      src="../../public/profile.png"
-    />
-    <div>
-      <h2 className="text-base font-medium text-gray-900">
-        John Doe
-      </h2>
-      <h3 className="text-xs font-normal text-gray-400">
-        Jumat, 12 Desember 2012
-      </h3>
-
-      <p className="my-4 w-full text-sm/relaxed text-gray-500">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-        dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-        sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-        voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-        Molestias explicabo corporis voluptatem?
-      </p>
-    </div>
-    </div>
-  </section>
+      <Comment postId={params.id} />
     </article>
   );
 };
