@@ -3,16 +3,30 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import USER_API from "../../api/user-api";
 import useStore from "../../store";
+import { yupResolver } from "@hookform/resolvers/yup";
+import INPUT_VALIDATOR from "../../utils/validator";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 const RegisterPage = () => {
   const store = useStore();
+
   const navigate = useNavigate();
+
+  // alert untuk register gagal
+  const notifyError = (errMessage) =>
+    toast.error(errMessage, {
+      autoClose: 1000,
+      closeOnClick: true,
+    });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(INPUT_VALIDATOR.registerDataSchema)
+  });
 
   // API register mutation
   const { mutate: registerUser, isLoading } = useMutation(
@@ -23,6 +37,11 @@ const RegisterPage = () => {
       },
       onSuccess: async (data) => {
         store.setLoading(false);
+        console.log(data);
+        if (data.error) {
+          notifyError(data?.message);
+          return;
+        }
         localStorage.setItem("auth_user", JSON.stringify(data.user));
         navigate("/login");
       },
@@ -35,7 +54,7 @@ const RegisterPage = () => {
 
   const onSubmit = (values) => {
     if (values.password !== values.password_confirmation) {
-      alert('password tidak sama')
+      toast('password tidak sama')
       return;
       }
     // eslint-disable-next-line no-unused-vars
@@ -46,6 +65,7 @@ const RegisterPage = () => {
   };
 
   return (
+    <>
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
@@ -82,9 +102,8 @@ const RegisterPage = () => {
                   id="FullName"
                   name="name"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  {...register("name", {
-                    required: "Nama tidak boleh kosong",
-                  })}
+                  placeholder="Masukan nama lengkap"
+                  {...register("name")}
                 />
                 {errors.name && (
                   <span className="text-red-600">{errors.name.message}</span>
@@ -101,9 +120,8 @@ const RegisterPage = () => {
                   id="Email"
                   name="email"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  {...register("email", {
-                    required: "Email tidak boleh kosong",
-                  })}
+                  placeholder="Masukan email"
+                  {...register("email")}
                 />
                 {errors.email && (
                   <span className="text-red-600">{errors.email.message}</span>
@@ -120,9 +138,8 @@ const RegisterPage = () => {
                   id="Password"
                   name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  {...register("password", {
-                    required: "Password tidak boleh kosong",
-                  })}
+                  placeholder="Masukan password"
+                  {...register("password")}
                 />
                 {errors.password && (
                   <span className="text-red-600">{errors.password.message}</span>
@@ -142,9 +159,8 @@ const RegisterPage = () => {
                   id="PasswordConfirmation"
                   name="password_confirmation"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  {...register("password_confirmation", {
-                    required: "Konfirmasi Password tidak boleh kosong",
-                  })}
+                  placeholder="Masukan konfirmasi password"
+                  {...register("password_confirmation")}
                 />
                 {errors.password_confirmation && (
                   <span className="text-red-600">{errors.password_confirmation.message}</span>
@@ -187,6 +203,8 @@ const RegisterPage = () => {
         </main>
       </div>
     </section>
+    <ToastContainer />
+    </>
   );
 };
 
