@@ -22,7 +22,8 @@ const USER_API = {
       console.log(res);
       return res;
     } catch (err) {
-      console.log(err.response.data);
+      return err.response.data;
+      // console.log(err.response.data);
     }
   },
 
@@ -35,7 +36,7 @@ const USER_API = {
 
       return res;
     } catch (err) {
-      console.log(err.response.data);
+      return err.response.data;
     }
   },
 
