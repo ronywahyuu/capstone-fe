@@ -14,6 +14,20 @@ const DONASI_API = {
     }
   },
 
+  getSingleDonasiFn: async (id) => {
+    await axios
+      .get(API_ENDPOINT.SINGLE_DONASI(id), {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  },
+
   getMyDonasiFn: async (id) => {
     try {
       const res = await axios.get(API_ENDPOINT.ALL_MY_DONASI(id), {

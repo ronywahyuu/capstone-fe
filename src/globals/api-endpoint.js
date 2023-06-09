@@ -5,14 +5,17 @@ const API_ENDPOINT = {
   ALL_DONASI: `${CONFIG.API_URL}/posts`,
   ALL_MY_DONASI: (id) => `${CONFIG.API_URL}/posts/?userId=${id}`,
   CREATE_DONASI: `${CONFIG.API_URL}/posts`,
-  SINGLE_DONASI: (id) => `${CONFIG.API_URL}/${id}`, // <=== DETAIL, UPDATE, DELETE
+  SINGLE_DONASI: (id) => `${CONFIG.API_URL}/posts/${id}`, // <=== DETAIL, UPDATE, DELETE
   // COMMENT DONASI
-  CREATE_COMMENT: `${CONFIG.API_URL}/comments`,
+  CREATE_COMMENT: `${CONFIG.API_URL}/comments/posts`,
   GET_COMMENT_DONASI: (id) => `${CONFIG.API_URL}/comments/posts/${id}`,
+  CREATE_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved`,
+  DELETE_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved`,
+  GET_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved/`,
 
   // ==================== USER ====================
   LOGIN: `${CONFIG.API_URL}/users/login`,
-  REGISTER: `${CONFIG.API_URL}/auth/register`,
+  REGISTER: `${CONFIG.API_URL}/users/register`,
   LOGOUT: `${CONFIG.API_URL}/users/signout`,
   DETAIL_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
 
