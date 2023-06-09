@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import USER_API from "../../api/user-api";
 import useStore from "../../store";
 const LoginPage = () => {
@@ -147,12 +147,12 @@ const LoginPage = () => {
             </p>
           </div>
           <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="inline-block w-full rounded-lg bg-slate-700 px-5 py-3 font-medium text-white "
-            >
-              Daftar
-            </button>
+          <Link to="/register"
+          type="submit"
+          className="inline-block w-full rounded-lg bg-slate-700 px-5 py-3 font-medium text-white text-center">
+            
+            Daftar            
+            </Link>
           </div>
         </form>
       </div>

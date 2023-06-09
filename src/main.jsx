@@ -47,10 +47,10 @@ const router = createBrowserRouter([
         path: "timeline",
         element: <MainPage />,
       },
-      {
+      /* {
         path: "timeline/write",
         element: <WritePost />,
-      },
+      }, */
       // detail
       {
         path: 'timeline/:id',

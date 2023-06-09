@@ -12,7 +12,7 @@ const API_ENDPOINT = {
 
   // ==================== USER ====================
   LOGIN: `${CONFIG.API_URL}/users/login`,
-  REGISTER: `${CONFIG.API_URL}/auth/register`,
+  REGISTER: `${CONFIG.API_URL}/users/register`,
   LOGOUT: `${CONFIG.API_URL}/users/signout`,
   DETAIL_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
 
