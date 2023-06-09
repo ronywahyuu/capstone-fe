@@ -1,4 +1,50 @@
+import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import USER_API from "../../api/user-api";
+import useStore from "../../store";
+
 const RegisterPage = () => {
+  const store = useStore();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  // API register mutation
+  const { mutate: registerUser, isLoading } = useMutation(
+    (userData) => USER_API.registerFn(userData),
+    {
+      onMutate: () => {
+        store.setLoading(true);
+      },
+      onSuccess: async (data) => {
+        store.setLoading(false);
+        localStorage.setItem("auth_user", JSON.stringify(data.user));
+        navigate("/login");
+      },
+      onError: (error) => {
+        store.setLoading(false);
+        console.log(error);
+      },
+    }
+  );
+
+  const onSubmit = (values) => {
+    if (values.password !== values.password_confirmation) {
+      alert('password tidak sama')
+      return;
+      }
+    // eslint-disable-next-line no-unused-vars
+    const { password_confirmation, ...userData } = values;
+    registerUser(userData);
+
+  
+  };
+
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -25,28 +71,28 @@ const RegisterPage = () => {
               Selamat Datang
             </h1>
 
-            <form action="#" className="mt-8 grid grid-cols-6 gap-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 grid grid-cols-6 gap-6">
               <div className="col-span-6">
-                <label
-                  htmlFor="FullName"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="FullName" className="block text-sm font-medium text-gray-700">
                   Nama Lengkap
                 </label>
 
                 <input
                   type="text"
                   id="FullName"
-                  name="full_name"
-                  className="mt-1  w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  name="name"
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("name", {
+                    required: "Nama tidak boleh kosong",
+                  })}
                 />
+                {errors.name && (
+                  <span className="text-red-600">{errors.name.message}</span>
+                )}
               </div>
 
               <div className="col-span-6">
-                <label
-                  htmlFor="Email"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="Email" className="block text-sm font-medium text-gray-700">
                   Email
                 </label>
 
@@ -55,14 +101,17 @@ const RegisterPage = () => {
                   id="Email"
                   name="email"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("email", {
+                    required: "Email tidak boleh kosong",
+                  })}
                 />
+                {errors.email && (
+                  <span className="text-red-600">{errors.email.message}</span>
+                )}
               </div>
 
               <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="Password"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="Password" className="block text-sm font-medium text-gray-700">
                   Password
                 </label>
 
@@ -71,7 +120,13 @@ const RegisterPage = () => {
                   id="Password"
                   name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("password", {
+                    required: "Password tidak boleh kosong",
+                  })}
                 />
+                {errors.password && (
+                  <span className="text-red-600">{errors.password.message}</span>
+                )}
               </div>
 
               <div className="col-span-6 sm:col-span-3">
@@ -87,7 +142,13 @@ const RegisterPage = () => {
                   id="PasswordConfirmation"
                   name="password_confirmation"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  {...register("password_confirmation", {
+                    required: "Konfirmasi Password tidak boleh kosong",
+                  })}
                 />
+                {errors.password_confirmation && (
+                  <span className="text-red-600">{errors.password_confirmation.message}</span>
+                )}
               </div>
 
               <div className="col-span-6">
@@ -100,20 +161,23 @@ const RegisterPage = () => {
                   />
 
                   <span className="text-sm text-gray-700">
-                    I want to receive emails about events, product updates and
-                    company announcements.
+                    I want to receive emails about events, product updates and company announcements.
                   </span>
                 </label>
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button className="inline-block shrink-0 rounded-md border border-cyan-600 bg-cyan-500 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                  Daftar
+                <button
+                  type="submit"
+                  className="inline-block shrink-0 rounded-md border border-cyan-600 bg-cyan-500 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Daftar"}
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                   Sudah punya akun?
-                  <a href="#" className="text-cyan-700 underline ml-2">
+                  <a href="/login" className="text-cyan-700 underline ml-2">
                     Log in
                   </a>
                 </p>
