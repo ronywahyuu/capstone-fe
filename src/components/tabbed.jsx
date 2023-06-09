@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-import { useCallback } from "react";
 
-const Tabbed = ({ forYou, setForYou }) => {
+const Tabbed = ({ forYou, setForYou, text1, text2 }) => {
   
 
   // const switchTab = useCallback((tabName) => {
@@ -26,7 +25,7 @@ const Tabbed = ({ forYou, setForYou }) => {
             : "hover:text-blue-900"
         }`}
       >
-        Untuk anda
+        {text1}
       </div>
 
       <div
@@ -38,7 +37,7 @@ const Tabbed = ({ forYou, setForYou }) => {
             : "hover:text-blue-800"
         }`}
       >
-        Milik anda
+        {text2}
       </div>
     </nav>
   );
@@ -47,6 +46,8 @@ const Tabbed = ({ forYou, setForYou }) => {
 Tabbed.propTypes = {
   forYou: PropTypes.bool,
   setForYou: PropTypes.func,
+  text1: PropTypes.string,
+  text2: PropTypes.string
 };
 
 export default Tabbed;

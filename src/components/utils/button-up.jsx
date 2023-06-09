@@ -1,4 +1,3 @@
-import React from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 const ButtonToUp = () => {
 
