@@ -165,7 +165,7 @@ const DetailPage = () => {
   // jangan tampilkan apapun jika loading
   if (isLoading) return;
 
-  const { title, createdAt, description, bannerImg } = data.data.post;
+  const { title, createdAt, description, linkForm, bannerImg } = data.data.post;
   const createdDate = new Date(createdAt).toLocaleDateString("id-ID", {
     weekday: "long",
     year: "numeric",
@@ -216,6 +216,8 @@ const DetailPage = () => {
           <h3 className="text-xs font-normal text-gray-400">{createdDate}</h3>
 
           <p className="my-4  text-sm/relaxed text-gray-500">{description}</p>
+
+          <a className="text-s underline font-normal text-cyan-500 hover:text-cyan-700" href={linkForm} target="_blank" rel="noreferrer">{linkForm}</a>
 
           {bannerImg && (
             <img
