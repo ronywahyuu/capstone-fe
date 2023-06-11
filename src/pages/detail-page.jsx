@@ -24,14 +24,14 @@ const DetailPage = () => {
   const userId = JSON.parse(localStorage.getItem("auth_user")).id;
   // get saved by current user
   const {data: getSavedData} = useFetch("getSavedCurrentUser", () =>
-    axios.get("http://localhost:3000/api/v1/saved?userId=" + userId, {
+    axios.get("http://localhost:8080/api/v1/saved?userId=" + userId, {
       withCredentials: true,
     })
   );
 
   // get likes by current user
   const {data: getLikesDataByCurrentUser} = useFetch("getLikesCurrentUser", () =>
-    axios.get("http://localhost:3000/api/v1/likes/donasi?userId=" + userId, {
+    axios.get("http://localhost:8080/api/v1/likes/donasi?userId=" + userId, {
       withCredentials: true,
     })
   );
@@ -83,7 +83,7 @@ const DetailPage = () => {
   // mutation untuk batal bookmark post
   const { mutate: unBookMarkPost } = useMutation(
     () =>
-      axios.delete("http://localhost:3000/api/v1/saved", {
+      axios.delete("http://localhost:8080/api/v1/saved", {
         withCredentials: true,
         data: {
           userId: JSON.parse(localStorage.getItem("auth_user")).id,
@@ -104,7 +104,7 @@ const DetailPage = () => {
   // mutation untuk like post
   const { mutate: likePost } = useMutation(
     (payload) =>
-      axios.post("http://localhost:3000/api/v1/likes/donasi", payload, {
+      axios.post("http://localhost:8080/api/v1/likes/donasi", payload, {
         withCredentials: true,
       }),
     {
@@ -118,7 +118,7 @@ const DetailPage = () => {
   // mutation untuk unlike post
   const { mutate: unlikePost } = useMutation(
     () =>
-      axios.delete("http://localhost:3000/api/v1/likes/donasi", {
+      axios.delete("http://localhost:8080/api/v1/likes/donasi", {
         withCredentials: true,
         data: {
           userId: JSON.parse(localStorage.getItem("auth_user")).id,
