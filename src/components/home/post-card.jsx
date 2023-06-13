@@ -82,7 +82,7 @@ const PostCard = ({ content }) => {
               </div>
             </div>
             <Link
-              to={`/home/timeline/${content.id}`}
+              to={`${content.id}`}
               className="block bg-cyan-500 px-5 py-3 text-center text-xs font-bold uppercase text-white transition hover:bg-cyan-700"
             >
               Read More

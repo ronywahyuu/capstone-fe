@@ -89,7 +89,8 @@ const MainPage = () => {
   };
 
   const handleScroll = useCallback(() => {
-    const position = window.pageYOffset;
+    // const position = window.pageYOffset;
+    const position = window.scrollY;
     if (position > 200) {
       setShowButton(true);
     } else {

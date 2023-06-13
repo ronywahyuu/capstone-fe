@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
@@ -12,7 +11,7 @@ import AboutPage from './pages/about.jsx'
 import BlogPage from './pages/blog-page.jsx'
 import MainPage from './pages/main-page.jsx'
 import DetailPage from './pages/detail-page.jsx'
-import FormDonasi from './components/home/write.jsx'
+import WritePost from './components/home/write.jsx'
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
@@ -53,6 +52,10 @@ const router = createBrowserRouter([
         element: <DetailPage/>
       },
       {
+        path: 'blog/:id',
+        element: <DetailPage/>
+      },
+      {
         path: "blog",
         element: <MainPage />,
       },
@@ -62,7 +65,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'timeline/write',
-        element: <FormDonasi/>
+        element: <WritePost/>
+      },
+      {
+        path: 'blog/write',
+        element: <WritePost/>
       }
     ]
   }
