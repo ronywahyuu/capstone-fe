@@ -22,10 +22,13 @@ const WritePost = () => {
       }),
     {
       onSuccess: () => {
-        console.log("success");
         navigate("/home/timeline");
         queryClient.invalidateQueries("donasi");
       },
+      onError: (error) => {
+        // console.log(error.response.data);
+        alert(error.response.data.message);
+      }
     }
   );
 
@@ -33,7 +36,7 @@ const WritePost = () => {
   const { mutate: addBlog } = useMutation(
     (payload) =>
       axios.post(
-        'http://localhost:8080/api/v1/blogs',
+        API_ENDPOINT.CREATE_BLOG,
         payload,
         { withCredentials: true }
       ),
@@ -43,6 +46,9 @@ const WritePost = () => {
         navigate("/home/blog");
         queryClient.invalidateQueries("blog");
       },
+      onError: (error) => {
+        alert(error.response.data.message);
+      }
     }
   );
 
