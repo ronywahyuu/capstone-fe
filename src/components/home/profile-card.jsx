@@ -26,7 +26,7 @@ const ProfileCard = () => {
           {user?.name}
         </h3>
 
-        <p className="mt-2 hidden text-sm sm:block">Pekerja Lepas</p>
+        <p className="mt-2 hidden text-sm sm:block">{user?.profession}</p>
       </div>
 
       {/* stats */}
