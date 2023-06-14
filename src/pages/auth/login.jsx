@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import INPUT_VALIDATOR from "../../utils/validator";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 const LoginPage = () => {
   const store = useStore();
 
@@ -36,7 +37,14 @@ const LoginPage = () => {
       },
       onSuccess: async (data) => {
         store.setLoading(false);
-        console.log(data);
+        Cookies.set("access_token", data.data.token, {
+
+          sameSite: "none",
+          secure: true,
+          expires: 1,
+        });
+        // console.log('access token: ', data.data.access_token)
+        // Cookies.set("auth_token", "teaefeaf", { expires: 1 });
         if (data.error) {
           notifyError(data?.message);
           return;
