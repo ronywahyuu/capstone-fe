@@ -52,7 +52,7 @@ const DetailBlog = ({ postId, userId }) => {
 
   return (
     <article className="">
-      <div className="p-6 md:py-10 md:px-20 flex">
+      <div className="p-6 md:p-10  flex">
         <img
           className="h-16 w-16 object-cover rounded-full mr-4"
           alt="Photo Profile"
@@ -121,18 +121,19 @@ const DetailBlog = ({ postId, userId }) => {
         )}
       </div>
 
-      <form onSubmit={handleAddComment} className="p-4 ml-16 sm:p-6 flex ">
+      {/* form komentar */}
+      <form onSubmit={handleAddComment} className="p-4 sm:p-6 flex  ">
         <img
           className="h-12 w-12 object-cover rounded-full mr-4"
           alt="Photo Profile"
-          src="../../public/profile.png"
+          src="/profile.png"
         />
         <div className="flex">
           <input
             type="text"
             id="UserComment"
             placeholder="Masukan komentar Anda"
-            className="mt-1 ml-1.5 w-96 h-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+            className="mt-1 ml-1.5 w-96 h-full rounded-md border-gray-200 shadow-sm sm:text-sm border"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />

@@ -12,6 +12,15 @@ const useStore = create((set) => ({
     })),
   setLoading: (loading) => set((state) => ({ ...state, loading })),
 
+
+  // get user from local storage
+  getUser: () => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      return JSON.parse(user);
+    }
+    return null;
+  },
   // get Donasi
 }));
 
