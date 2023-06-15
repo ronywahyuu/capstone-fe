@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 const Featured = ({ text, description, icon }) => {
   return (
-    <a href="" className="group relative block h-48 md:h-64 w-full">
+    <div  className="group cursor-default relative block h-48 md:h-64 w-full">
       <span className="absolute inset-0 border-2 border-dashed border-black"></span>
 
       <div className="relative flex h-full transform items-end border-2 border-black bg-white transition duration-500 group-hover:-translate-x-2  group-hover:-translate-y-2 ">
@@ -17,7 +17,7 @@ const Featured = ({ text, description, icon }) => {
           <p className="mt-4 text-sm sm:text-base">{description}</p>
         </div>
       </div>
-    </a>
+    </div>
   );
 };
 
