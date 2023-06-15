@@ -102,7 +102,7 @@ const RegisterPage = () => {
                   id="FullName"
                   name="name"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  placeholder="Masukan nama lengkap"
+                  placeholder="Cth: Aldi Martin"
                   {...register("name")}
                 />
                 {errors.name && (
@@ -120,13 +120,34 @@ const RegisterPage = () => {
                   id="Email"
                   name="email"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  placeholder="Masukan email"
+                  placeholder="martin@mail.com"
                   {...register("email")}
                 />
                 {errors.email && (
                   <span className="text-red-600">{errors.email.message}</span>
                 )}
               </div>
+
+              <div className="col-span-6">
+                <label htmlFor="Email" className="block text-sm font-medium text-gray-700">
+                  Profesi
+                </label>
+
+                <input
+                  type="text"
+                  id="Profession"
+                  name="profession"
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  placeholder="Mahasiswa, Freelancer, Software Developer, dan lainnya "
+                  
+                  {...register("profession")}
+                />
+                {errors.email && (
+                  <span className="text-red-600">{errors.profession.message}</span>
+                )}
+              
+              </div>
+
 
               <div className="col-span-6 sm:col-span-3">
                 <label htmlFor="Password" className="block text-sm font-medium text-gray-700">
@@ -138,7 +159,7 @@ const RegisterPage = () => {
                   id="Password"
                   name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  placeholder="Masukan password"
+                  placeholder="********"
                   {...register("password")}
                 />
                 {errors.password && (
@@ -159,7 +180,7 @@ const RegisterPage = () => {
                   id="PasswordConfirmation"
                   name="password_confirmation"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  placeholder="Masukan konfirmasi password"
+                  placeholder="********"
                   {...register("password_confirmation")}
                 />
                 {errors.password_confirmation && (
@@ -167,20 +188,6 @@ const RegisterPage = () => {
                 )}
               </div>
 
-              <div className="col-span-6">
-                <label htmlFor="MarketingAccept" className="flex gap-4">
-                  <input
-                    type="checkbox"
-                    id="MarketingAccept"
-                    name="marketing_accept"
-                    className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm"
-                  />
-
-                  <span className="text-sm text-gray-700">
-                    I want to receive emails about events, product updates and company announcements.
-                  </span>
-                </label>
-              </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button

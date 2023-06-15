@@ -12,6 +12,10 @@ const API_ENDPOINT = {
   CREATE_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved`,
   DELETE_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved`,
   GET_BOOKMARK_DONASI: `${CONFIG.API_URL}/saved/`,
+  CREATE_LIKE_DONASI: `${CONFIG.API_URL}/likes/donasi`,
+  DELETE_LIKE_DONASI: `${CONFIG.API_URL}/likes/donasi`,
+  GET_CURRENT_USER_LIKE_DONASI: (userId)=> `${CONFIG.API_URL}/likes/donasi/?userId=${userId}`,
+  GET_CURRENT_USER_BOOKMARK_DONASI: (userId)=> `${CONFIG.API_URL}/saved/?userId=${userId}`,
 
   // ==================== USER ====================
   LOGIN: `${CONFIG.API_URL}/users/login`,

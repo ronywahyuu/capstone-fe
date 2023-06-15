@@ -11,6 +11,8 @@ const useStore = create((set) => ({
       authUser: user,
     })),
   setLoading: (loading) => set((state) => ({ ...state, loading })),
+
+  // get Donasi
 }));
 
 export const usePersistedStore = create(
