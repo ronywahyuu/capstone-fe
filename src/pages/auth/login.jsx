@@ -158,7 +158,7 @@ const LoginPage = () => {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="inline-block w-full rounded-lg bg-cyan-500 px-5 py-3 text-sm font-medium text-white"
+                className="inline-block w-full rounded-lg bg-cyan-700 px-5 py-3 text-sm font-medium text-white"
               >
                 {isLoading ? (
                   <span className="text-xs">Loading...</span>
@@ -171,20 +171,24 @@ const LoginPage = () => {
               <p className="text-sm text-center text-gray-500">
                 Belum Punya Akun?
               </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <Link
-                to="/register"
-                type="submit"
-                className="inline-block text-center w-full rounded-lg bg-slate-700 px-5 py-3 font-medium text-white "
-              >
-                Daftar
+              <Link to="/register">
+                <p className="text-sm font-bold text-center text-cyan-700">
+                  Daftar Sekarang
+                </p>
               </Link>
+              <div className="col-span-6 mt-10 sm:flex sm:items-center sm:gap-4">
+                <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                  Kembali ke
+                  <Link to="/" className="text-cyan-700 underline ml-2">
+                    Halaman Utama
+                  </Link>
+                </p>
+              </div>
             </div>
           </form>
         </div>
 
-        <div className="relative bg-cyan-500 h-64 w-full sm:h-96 lg:h-full lg:w-1/2 flex flex-col justify-center items-center">
+        <div className="relative bg-cyan-600 h-64 w-full sm:h-96 lg:h-full lg:w-1/2 flex flex-col justify-center items-center">
           <img
             alt="Welcome"
             src="./lives-matter.png"
