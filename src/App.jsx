@@ -76,7 +76,7 @@ function App() {
         <Route path="blog/:id" element={<DetailPage />} />
         <Route path="timeline/write" element={<WritePost />} />
         <Route path="blog/write" element={<WritePost />} />
-        {/* <Route path="timeline/edit/:id" element={<WritePost/>} /> */}
+        <Route path="timeline/edit/:id" element={<WritePost/>} />
         <Route path="saved" element={<MainPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />

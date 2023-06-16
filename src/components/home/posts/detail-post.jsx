@@ -13,9 +13,12 @@ import Comment from "../comment";
 import useFetch from "../../../hooks/useFetch";
 import { useState } from "react";
 import useGetUser from "../../../hooks/useGetUser";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const DetailPost = ({ postId, userId }) => {
   const [commentText, setCommentText] = useState("");
+
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
@@ -150,6 +153,26 @@ const DetailPost = ({ postId, userId }) => {
     }
   );
 
+  // ==================== delete post ====================
+  const { mutate: deletePost } = useMutation(
+    () => axios.delete(API_ENDPOINT.DELETE_DONASI(postId), {
+      withCredentials: true,
+    }),
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        queryClient.invalidateQueries("donasi");
+        queryClient.invalidateQueries("getSingleDonasi");
+        queryClient.invalidateQueries("getUserForDetailDonasi");
+
+        navigate("/home/timeline");
+      },
+      onError: (data) => {
+        console.log(data);
+      },
+    }
+  );
+
   // ==================== function bookmark ====================
   const handleBookmark = () => {
     const payload = {
@@ -196,6 +219,19 @@ const DetailPost = ({ postId, userId }) => {
     };
     unlikePost(payload);
   };
+
+  const handleDeletePost = () => {
+    // alert confirmation
+    const confirmation = window.confirm("Are you sure want to delete this post?");
+    if (confirmation){
+      deletePost();
+      alert("Post deleted successfully");
+    }
+  }
+
+  const handleEditPost = () => {
+    navigate(`/home/timeline/edit/${postId}`);
+  }
 
   // console.log({postId})
   if (isLoading) return <h1>Loading...</h1>;
@@ -292,8 +328,8 @@ const DetailPost = ({ postId, userId }) => {
 
         {isMine && (
           <div className="flex gap-3">
-            <button>Edit</button>
-            <button>Hapus</button>
+            <button onClick={handleEditPost}>Edit</button>
+            <button onClick={handleDeletePost}>Hapus</button>
           </div>
         )}
       </div>

@@ -1,8 +1,8 @@
 import axios from "axios";
 import API_ENDPOINT from "../../globals/api-endpoint";
 import { useForm } from "react-hook-form";
-import { QueryClient, useMutation } from "react-query";
-import { useLocation, useNavigate } from "react-router-dom";
+import { QueryClient, useMutation, useQuery } from "react-query";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -58,12 +58,47 @@ const WritePost = () => {
     }
   );
 
+  // mutation for edit donasi
+  const { mutate: editDonasi } = useMutation(
+    (payload) =>
+      axios.put(API_ENDPOINT.EDIT_DONASI(params.id), payload, {
+        withCredentials: true,
+      }),
+    {
+      onSuccess: () => {
+        alert("success edit");
+        navigate("/home/timeline");
+        queryClient.invalidateQueries("donasi");
+      },
+      onError: (error) => {
+        // notifyError(error.response.data.message);
+        alert(error.response.data.message);
+      },
+    }
+  );
+
+  // params
+  const params = useParams();
+  // console.log(params);
+  // get single donasi for edit
+
+  const { data: getEditDonasi } = useQuery("getEditDonasi", () =>
+    axios.get(API_ENDPOINT.SINGLE_DONASI(params.id))
+  );
+
+  // console.log(getEditDonasi.data.post);
   // ==================== JSX conditional render for post donasi ====================
-  if (location.pathname === "/home/timeline/write") {
+  if (
+    location.pathname === "/home/timeline/write" ||
+    location.pathname.includes("/home/timeline/edit")
+  ) {
     // handle submit and upload file
     const onSubmit = (data) => {
       // console.log(data)
       const { imgFile } = data;
+
+      // const editPath = location.pathname.includes("/home/timeline/edit")
+      // const writePath = location.pathname === "/home/timeline/write"
 
       if (imgFile[0] === undefined) {
         const formDataWithoutImg = new FormData();
@@ -93,16 +128,57 @@ const WritePost = () => {
       // console.log(imgFile[0])
       addDonasi(formData);
     };
+
+    const onSubmitEdit = (data) => {
+      // console.log(data)
+      const { imgFile } = data;
+
+      // const editPath = location.pathname.includes("/home/timeline/edit")
+      // const writePath = location.pathname === "/home/timeline/write"
+
+      if (imgFile[0] === undefined) {
+        const formDataWithoutImg = new FormData();
+        formDataWithoutImg.append("title", data.title);
+        formDataWithoutImg.append("description", data.description);
+        formDataWithoutImg.append("linkForm", data.linkForm);
+
+        editDonasi(formDataWithoutImg);
+      }
+
+      // generate picture name
+      const imgName = imgFile[0].name;
+      const imgNameSplit = imgName.split(".");
+      const imgNameExt = imgNameSplit[imgNameSplit.length - 1];
+      const imgNameWithoutExt = imgNameSplit[0];
+      const imgNameFinal = `${imgNameWithoutExt}-${Date.now()}.${imgNameExt}`;
+      // console.log(imgNameFinal)
+
+      // handle img
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("linkForm", data.linkForm);
+      // image
+      formData.append("imgFile", imgFile[0], imgNameFinal);
+
+      // console.log(imgFile[0])
+      editDonasi(formData);
+    };
+
+    const editPath = location.pathname.includes("/home/timeline/edit");
+    // const writePath = location.pathname === "/home/timeline/write";
     return (
       <>
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-lg">
             <h4 className="text-center text-lg font-medium sm:text-2xl">
-              Buat Donasi
+              {editPath ? "Edit Donasi" : "Buat Donasi"}
             </h4>
 
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={
+                editPath ? handleSubmit(onSubmitEdit) : handleSubmit(onSubmit)
+              }
               className="mb-0 mt-4 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 border-t-4 border-cyan-500"
             >
               <div>
@@ -115,7 +191,13 @@ const WritePost = () => {
                     placeholder="Judul"
                     type="text"
                     id="judul"
-                    {...register("title", { required: true })}
+                    defaultValue={
+                      editPath ? getEditDonasi?.data.post.title :""
+                    }
+                    {...register("title",{
+                      value: editPath ? getEditDonasi?.data.post.title : "",
+                      required: editPath ? false : true,
+                    })}
                   />
                   {errors.title && (
                     <span className="absolute text-red-500 text- inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -135,7 +217,16 @@ const WritePost = () => {
                     placeholder="Deskripsi"
                     rows="1"
                     id="deskripsi"
-                    {...register("description", { required: true })}
+                    defaultValue={
+                      editPath
+                        ? getEditDonasi?.data.post.description
+                        : ""
+                    }
+                    {...register("description",{
+                      // if edit path, value is not required
+                      value: editPath ? getEditDonasi?.data.post.description : undefined,
+                      required: editPath ? false : true,
+                    })}
                   />
                 </div>
               </div>
@@ -152,7 +243,13 @@ const WritePost = () => {
                     placeholder="Input Link"
                     type="text"
                     id="input-link"
-                    {...register("linkForm", { required: true })}
+                    defaultValue={
+                      editPath ? getEditDonasi?.data.post.linkForm : ""
+                    }
+                    {...register("linkForm",{
+                      value: editPath ? getEditDonasi?.data.post.linkForm : "",
+                      required: editPath ? false : true,
+                    })}
                   />
                 </div>
               </div>
