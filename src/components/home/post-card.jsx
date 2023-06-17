@@ -59,7 +59,7 @@ const PostCard = ({ content }) => {
           <p className="my-4 line-clamp-3 text-sm/relaxed text-gray-500 ">
             {savedLocation
               ? tabDonasi.description || tabBlog.description
-              : description}
+              : description || content.body}
           </p>
 
           {bannerImg && (
