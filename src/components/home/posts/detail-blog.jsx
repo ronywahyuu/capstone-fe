@@ -10,13 +10,14 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useState } from "react";
 import useGetUser from "../../../hooks/useGetUser";
+import API_ENDPOINT from "../../../globals/api-endpoint";
 
 const DetailBlog = ({ postId, userId }) => {
   const [commentText, setCommentText] = useState("");
 
   const { isLoading: isLoadingBlog, data: dataBlog } = useQuery(
     "getSingleBlog",
-    () => axios.get("http://localhost:8080/api/v1/blogs/" + postId)
+    () => axios.get(API_ENDPOINT.SINGLE_BLOG(postId)),
   );
 
   const blogData = dataBlog?.data?.blog;

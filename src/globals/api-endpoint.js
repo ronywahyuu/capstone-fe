@@ -24,6 +24,7 @@ const API_ENDPOINT = {
   REGISTER: `${CONFIG.API_URL}/users/register`,
   LOGOUT: `${CONFIG.API_URL}/users/signout`,
   DETAIL_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
+  UPDATE_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
 
   // ==================== BLOG ====================
   ALL_BLOG: `${CONFIG.API_URL}/blogs`,

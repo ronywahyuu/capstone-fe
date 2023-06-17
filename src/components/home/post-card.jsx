@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
+import { createdDate } from "../../utils/helpers";
 
 const PostCard = ({ content }) => {
   const location = useLocation();
+  // console.log({content})
 
   const savedLocation = location.pathname === "/home/saved";
   const tabDonasi = content?.post;
@@ -17,6 +19,10 @@ const PostCard = ({ content }) => {
     likedCount,
     commentsCount,
   } = content;
+  // const date = createdDate(
+  //   savedLocation ? tabDonasi.createdAt || tabBlog.createdAt : createdAt
+  // );
+  // console.log({date})
   const createdDate = new Date(
     savedLocation ? tabDonasi.createdAt || tabBlog.createdAt : createdAt
   ).toLocaleDateString("id-ID", {
@@ -27,8 +33,12 @@ const PostCard = ({ content }) => {
   });
   const avatarImg = author?.avatarImg;
   const name = author?.name;
+
+  console.log(content)
   // const { avatarImg, name } = author;
 
+  // console.log(content.post)
+  // console.log(content)
   return (
     <article  id={content.id} className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm my-6 ">
       <div className="p-4 sm:p-6 ">
@@ -46,11 +56,13 @@ const PostCard = ({ content }) => {
               {savedLocation ? tabDonasi.title || tabBlog.title : title}
             </h1>
             <p className="text-xs font-normal text-gray-400">
-              {/* Jumat, 12 Desember 2012 */}
-              {createdDate}
+              {/* {createdDate} */}
+              {savedLocation ? tabDonasi.createdAt || tabBlog.createdAt : createdDate}
+              {/* {savedLocation ? tabDonasi.createdAt || tabBlog.createdAt : createdDate} */}
+              
             </p>
             <span className="text-xs font-normal text-gray-400">
-              Diposting oleh : {savedLocation ? "Anda" : name}
+              Diposting oleh : {savedLocation ? "sa" : name}
             </span>
           </div>
 
@@ -82,7 +94,8 @@ const PostCard = ({ content }) => {
               </div>
             </div>
             <Link
-              to={`${content.id}`}
+              // to={`${content.id}`}
+              to={savedLocation ? `${content.post.id}` : `${content.id}`}
               className="block bg-cyan-500 px-5 py-3 text-center text-xs font-bold uppercase text-white transition hover:bg-cyan-700"
             >
               Read More

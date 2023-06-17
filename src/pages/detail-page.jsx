@@ -19,6 +19,19 @@ const DetailPage = () => {
     // return <div>awfwfw</div>
     return <DetailPost userId={userId} postId={params.id} />;
   }
+  
+
+  // =========================== render saved donasi JSX ===========================
+  if (location.pathname.includes("saved")) {
+    return <DetailPost userId={userId} postId={params.id} />;
+  }
+
+  // // =========================== render saved blog JSX ===========================
+  // if (location.pathname.includes("/blog/saved")) {
+  //   return <DetailBlog userId={userId} postId={params.id} />;
+  // }
+
+  return <div>404</div>;
 };
 
 export default DetailPage;
