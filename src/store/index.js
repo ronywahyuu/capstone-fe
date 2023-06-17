@@ -5,6 +5,11 @@ const useStore = create((set) => ({
   authUser: null,
   loading: false,
   message: null,
+  showModal: false,
+
+  // toggle modal
+  setShowModal: () => set((state) => ({ ...state, showModal: !state.showModal })),
+
   setAuthUser: (user) =>
     set((state) => ({
       ...state,

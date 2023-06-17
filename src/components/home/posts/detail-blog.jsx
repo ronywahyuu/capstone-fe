@@ -7,20 +7,21 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient} from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import API_ENDPOINT from "../../../globals/api-endpoint";
 import Comment from "../comment";
 import useFetch from "../../../hooks/useFetch";
 import { useState } from "react";
 import useGetUser from "../../../hooks/useGetUser";
+import PropTypes from "prop-types";
 
-const DetailBlog = ({ postId, blogId, userId }) => {
+const DetailBlog = ({ blogId, userId }) => {
   const [commentText, setCommentText] = useState("");
 
   const queryClient = useQueryClient();
 
-  const { isLoading, data, isError } = useQuery("getSingleBlog",() => 
-    axios.get(API_ENDPOINT.SINGLE_BLOG(postId))
+  const { isLoading, data, isError } = useQuery("getSingleBlog", () =>
+    axios.get(API_ENDPOINT.SINGLE_BLOG(blogId))
   );
 
   // ==================== get saved by current user ====================
@@ -39,32 +40,33 @@ const DetailBlog = ({ postId, blogId, userId }) => {
       })
   );
 
-   // ==================== check if this post is mine ====================
-   const user = useGetUser(userId, "getUserForDetailBlog");
-   const isMine = user?.data?.postBlog.map((blog) => blog.id).includes(postId);
-   const isSaved = dataBlog?.data?.data?.some(
-     (saved) => saved.postId === postId
-   );
+  // ==================== check if this post is mine ====================
+  const user = useGetUser(userId, "getUserForDetailBlog");
+  const isMine = user?.data?.postBlog.map((blog) => blog.id).includes(blogId);
+  const isSaved = dataBlog?.data?.data?.some(
+    (saved) => saved.blogId === blogId
+  );
   // compare likes data with current post
-   const isLiked = getLikesBlogByCurrentUser?.data?.like?.some(
+  const isLiked = getLikesBlogByCurrentUser?.data?.like?.some(
     (like) => like.blogId === blogId
   );
 
-  const { mutate: addCommentBlog, isLoading: isLoadingAddCommentBlog } = useMutation(
-    (payload) =>
-      axios.post(API_ENDPOINT.CREATE_COMMENT_BLOG, payload, {
-        withCredentials: true,
-      }),
-    {
-      onSuccess: () => {
-        setCommentText("");
-        queryClient.invalidateQueries("getCommentsBlog");
-      },
-      onError: () => {
-        console.log("error");
-      },
-    }
-  );
+  const { mutate: addCommentBlog, isLoading: isLoadingAddCommentBlog } =
+    useMutation(
+      (payload) =>
+        axios.post(API_ENDPOINT.CREATE_COMMENT_BLOG, payload, {
+          withCredentials: true,
+        }),
+      {
+        onSuccess: () => {
+          setCommentText("");
+          queryClient.invalidateQueries("getCommentsBlog");
+        },
+        onError: () => {
+          console.log("error");
+        },
+      }
+    );
   // ==================== add bookmark ====================
   const { mutate: bookMarkBlog } = useMutation(
     (payload) =>
@@ -79,14 +81,14 @@ const DetailBlog = ({ postId, blogId, userId }) => {
     }
   );
 
-    // ==================== remove bookmark ====================
+  // ==================== remove bookmark ====================
   const { mutate: unBookMarkBlog } = useMutation(
     () =>
       axios.delete(API_ENDPOINT.DELETE_BOOKMARK_BLOG, {
         withCredentials: true,
         data: {
           userId: JSON.parse(localStorage.getItem("auth_user")).id,
-          postId: postId,
+          blogId: blogId,
         },
       }),
     {
@@ -100,7 +102,7 @@ const DetailBlog = ({ postId, blogId, userId }) => {
     }
   );
 
-    // ==================== add like ====================
+  // ==================== add like ====================
   const { mutate: likeBlog } = useMutation(
     (payload) =>
       axios.post(API_ENDPOINT.CREATE_LIKE_BLOG, payload, {
@@ -127,7 +129,6 @@ const DetailBlog = ({ postId, blogId, userId }) => {
       }),
     {
       onSuccess: () => {
-
         // secara reaktif mengupdate data dengan nama query setelah melakukan mutation
         queryClient.invalidateQueries("blog");
         queryClient.invalidateQueries("getLikesBlogCurrentUser");
@@ -143,7 +144,7 @@ const DetailBlog = ({ postId, blogId, userId }) => {
   const handleBookmark = () => {
     const payload = {
       userId: JSON.parse(localStorage.getItem("auth_user")).id,
-      postId: postId,
+      blogId: blogId,
     };
 
     // ini untuk memanggil function mutation
@@ -154,7 +155,7 @@ const DetailBlog = ({ postId, blogId, userId }) => {
   const handleUnBookmark = () => {
     const payload = {
       userId: JSON.parse(localStorage.getItem("auth_user")).id,
-      postId: postId,
+      blogId: blogId,
     };
 
     // ini untuk memanggil function mutation dari unbookmark
@@ -188,14 +189,8 @@ const DetailBlog = ({ postId, blogId, userId }) => {
 
   if (isLoading) return <h1>Loading...</h1>;
 
-  const {
-    title,
-    createdAt,
-    body,
-    bannerImg,
-    likedCount,
-    savedCount,
-  } = data.data.blog;
+  const { title, createdAt, body, bannerImg, likedCount, savedCount } =
+    data.data.blog;
   const createdDate = new Date(createdAt).toLocaleDateString("id-ID", {
     weekday: "long",
     year: "numeric",
@@ -216,19 +211,13 @@ const DetailBlog = ({ postId, blogId, userId }) => {
           src={avatarImg}
         />
         <div className="w-full">
-          <h1 className="text-lg font-medium text-gray-900">
-            {title}
-          </h1>
+          <h1 className="text-lg font-medium text-gray-900">{title}</h1>
           <h2 className="text-md font-normal text-gray-600">
             Diposting oleh: {name}
           </h2>
-          <h3 className="text-xs font-normal text-gray-400">
-            {createdDate}
-          </h3>
+          <h3 className="text-xs font-normal text-gray-400">{createdDate}</h3>
 
-          <p className="my-4  text-sm/relaxed text-gray-500">
-            {body}
-          </p>
+          <p className="my-4  text-sm/relaxed text-gray-500">{body}</p>
 
           {bannerImg && (
             <img
@@ -242,20 +231,20 @@ const DetailBlog = ({ postId, blogId, userId }) => {
       <div className="p-6 md:p-10 flex gap-6">
         {isLiked ? (
           <div className="flex gap-1">
-          <MdFavorite
-            onClick={handleUnlike}
-            className="cursor-pointer text-red-700 text-2xl transform motion-safe:hover:scale-110"
-          />
-          {likedCount}
+            <MdFavorite
+              onClick={handleUnlike}
+              className="cursor-pointer text-red-700 text-2xl transform motion-safe:hover:scale-110"
+            />
+            {likedCount}
           </div>
         ) : (
           // <span onClick={handleUnlike}>Liked</span>
           <div className="flex gap-1">
-          <MdFavoriteBorder
-            onClick={handleLike}
-            className="cursor-pointer text-2xl transform motion-safe:hover:scale-110"
-          />
-          {likedCount}
+            <MdFavoriteBorder
+              onClick={handleLike}
+              className="cursor-pointer text-2xl transform motion-safe:hover:scale-110"
+            />
+            {likedCount}
           </div>
         )}
         {isSaved ? (
@@ -304,14 +293,21 @@ const DetailBlog = ({ postId, blogId, userId }) => {
             type="submit"
             className="text-3xl ml-5 mt-3 transform motion-safe:hover:scale-110"
           >
-            {isLoadingAddCommentBlog ? "Loading..." : <MdSend />} 
+            {isLoadingAddCommentBlog ? "Loading..." : <MdSend />}
           </button>
         </div>
       </form>
 
-      <Comment postId={postId} />
+      <Comment postId={blogId} />
     </article>
   );
 };
 
+// proptypes
+DetailBlog.propTypes = {
+  blogId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+}
+
 export default DetailBlog;
+

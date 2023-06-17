@@ -16,12 +16,15 @@ const API_ENDPOINT = {
   DELETE_LIKE_DONASI: `${CONFIG.API_URL}/likes/donasi`,
   GET_CURRENT_USER_LIKE_DONASI: (userId)=> `${CONFIG.API_URL}/likes/donasi/?userId=${userId}`,
   GET_CURRENT_USER_BOOKMARK_DONASI: (userId)=> `${CONFIG.API_URL}/saved/?userId=${userId}`,
+  DELETE_DONASI: (id) => `${CONFIG.API_URL}/posts/${id}`,
+  EDIT_DONASI: (id) => `${CONFIG.API_URL}/posts/${id}`,
 
   // ==================== USER ====================
   LOGIN: `${CONFIG.API_URL}/users/login`,
   REGISTER: `${CONFIG.API_URL}/users/register`,
   LOGOUT: `${CONFIG.API_URL}/users/signout`,
   DETAIL_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
+  UPDATE_USER: (id) => `${CONFIG.API_URL}/users/${id}`,
 
   // ==================== BLOG ====================
   ALL_BLOG: `${CONFIG.API_URL}/blogs`,

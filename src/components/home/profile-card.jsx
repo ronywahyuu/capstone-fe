@@ -1,10 +1,17 @@
 import useGetUser from "../../hooks/useGetUser";
+import useStore from "../../store";
 // import PropTypes from "prop-types";
 const ProfileCard = () => {
   const { data: user } = useGetUser(
     JSON.parse(localStorage.getItem("auth_user"))?.id,
     "profileCardData"
   );
+
+  const { setShowModal, showModal } = useStore();
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   // ====================== UI ======================
   return (
@@ -48,7 +55,10 @@ const ProfileCard = () => {
 
       {/* button action */}
       <div className="mt-5 flex flex-col gap-2 mx-auto">
-        <button className="w-full py-2 px-4 text-sm font-medium text-white bg-cyan-500 rounded-md hover:bg-cyan-600">
+        <button
+          onClick={toggleModal}
+          className="w-full py-2 px-4 text-sm font-medium text-white bg-cyan-500 rounded-md hover:bg-cyan-600"
+        >
           Edit Profil
         </button>
       </div>
