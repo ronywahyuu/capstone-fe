@@ -4,13 +4,13 @@ const Footer = () => {
   return (
     <footer aria-label="Site Footer" className="bg-slate-200 ">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 ">
-        <div className="flex flex-col items-center gap-4 rounded-lg bg-blue-800 p-6 shadow-lg sm:flex-row sm:justify-between">
+        <div className="flex flex-col items-center gap-4 rounded-lg bg-cyan-600 p-6 shadow-lg sm:flex-row sm:justify-between">
           <strong className="text-xl text-white sm:text-xl">
             Siap untuk bergabung?
           </strong>
 
           <Link
-            className="inline-flex items-center gap-2 rounded-full border border-white bg-white px-8 py-3 text-indigo-600 hover:bg-transparent hover:text-white focus:outline-none focus:ring active:bg-white/90"
+            className="inline-flex items-center gap-2 rounded-full border border-white bg-white px-8 py-3 text-cyan-600 hover:bg-transparent hover:text-white focus:outline-none focus:ring active:bg-white/90"
             to="/login"
           >
             <span className="text-sm font-medium"> Ayo mulai </span>
@@ -41,7 +41,7 @@ const Footer = () => {
                 href="/"
                 rel="noreferrer"
                 target="_blank"
-                className="text-blue-700 transition hover:text-teal-700/75"
+                className="text-cyan-600 transition hover:text-teal-700/75"
               >
                 <span className="sr-only">Facebook</span>
                 <svg
@@ -64,7 +64,7 @@ const Footer = () => {
                 href="/"
                 rel="noreferrer"
                 target="_blank"
-                className="text-blue-700 transition hover:text-teal-700/75"
+                className="text-cyan-600 transition hover:text-teal-700/75"
               >
                 <span className="sr-only">Instagram</span>
                 <svg
@@ -87,7 +87,7 @@ const Footer = () => {
                 href="/"
                 rel="noreferrer"
                 target="_blank"
-                className="text-blue-700 transition hover:text-teal-700/75"
+                className="text-cyan-600 transition hover:text-teal-700/75"
               >
                 <span className="sr-only">Twitter</span>
                 <svg
@@ -106,7 +106,7 @@ const Footer = () => {
                 href="/"
                 rel="noreferrer"
                 target="_blank"
-                className="text-blue-700 transition hover:text-teal-700/75"
+                className="text-cyan-600 transition hover:text-teal-700/75"
               >
                 <span className="sr-only">GitHub</span>
                 <svg
@@ -129,7 +129,7 @@ const Footer = () => {
                 href="/"
                 rel="noreferrer"
                 target="_blank"
-                className="text-blue-700 transition hover:text-teal-700/75"
+                className="text-cyan-600 transition hover:text-teal-700/75"
               >
                 <span className="sr-only">Dribbble</span>
                 <svg
