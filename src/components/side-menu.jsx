@@ -8,6 +8,7 @@ import { BiLogOutCircle } from "react-icons/bi";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import USER_API from "../api/user-api";
+import Cookies from "js-cookie";
 
 const SideMenu = ({ offCanvas, setOffCanvas }) => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const SideMenu = ({ offCanvas, setOffCanvas }) => {
 
   const logout = () => {
     localStorage.removeItem("auth_user");
+    Cookies.remove("access_token");
     USER_API.logoutFn();
     navigate("/login");
   };

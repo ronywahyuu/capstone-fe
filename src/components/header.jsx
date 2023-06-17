@@ -47,7 +47,7 @@ const Header = () => {
             <div className="flex items-center gap-4">
               <div className="sm:flex sm:gap-4">
                 <NavLink
-                  className="rounded-md bg-teal-500 px-5 py-2.5 text-sm font-medium text-white shadow"
+                  className="rounded-md bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white shadow"
                   to="/login"
                 >
                   Gabung

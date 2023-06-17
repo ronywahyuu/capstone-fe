@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import INPUT_VALIDATOR from "../../utils/validator";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 const LoginPage = () => {
   const store = useStore();
 
@@ -19,6 +20,11 @@ const LoginPage = () => {
       closeOnClick: true,
     });
 
+  const notifySuccess = (message) =>
+    toast.success(message, {
+      autoClose: 1000,
+      closeOnClick: true,
+    });
   const {
     register,
     handleSubmit,
@@ -36,14 +42,25 @@ const LoginPage = () => {
       },
       onSuccess: async (data) => {
         store.setLoading(false);
-        console.log(data);
+        console.log("data: ", data);
         if (data.error) {
           notifyError(data?.message);
           return;
         }
+
+        Cookies.set("access_token", data.data.token, {
+          sameSite: "none",
+          secure: true,
+          expires: 1,
+        });
+        // console.log('access token: ', data.data.access_token)
+        // Cookies.set("auth_token", "teaefeaf", { expires: 1 });
         // menyimpan data user yang login ke local storage
         localStorage.setItem("auth_user", JSON.stringify(data.data.user));
 
+        if (data.status === 200) {
+          notifySuccess("Login berhasil");
+        }
         navigate("/home/timeline");
       },
     }
