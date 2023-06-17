@@ -11,7 +11,7 @@ const DetailPage = () => {
 
   // =========================== render blog JSX ===========================
   if (location.pathname.includes("blog")) {
-    return <DetailBlog userId={userId} postId={params.id} />;
+    return <DetailBlog userId={userId} blogId={params.id} />;
   }
 
   // =========================== render donasi JSX ===========================
