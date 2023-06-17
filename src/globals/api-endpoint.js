@@ -31,6 +31,17 @@ const API_ENDPOINT = {
   ALL_MY_BLOG: (id) => `${CONFIG.API_URL}/blogs/?userId=${id}`,
   SINGLE_BLOG: (id) => `${CONFIG.API_URL}/blogs/${id}`,
   CREATE_BLOG: `${CONFIG.API_URL}/blogs`,
+  // COMENT BLOG
+  CREATE_COMMENT_BLOG: `${CONFIG.API_URL}/comments/blogs`,
+  GET_COMMENT_BLOG: (id) => `${CONFIG.API_URL}/comments/blogs/${id}`,
+  CREATE_BOOKMARK_BLOG: `${CONFIG.API_URL}/saved/blogs`,
+  DELETE_BOOKMARK_BLOG: `${CONFIG.API_URL}/saved/blogs`,
+  GET_BOOKMARK_BLOG: `${CONFIG.API_URL}/saved/blogs`,
+  CREATE_LIKE_BLOG: `${CONFIG.API_URL}/likes/blogs`,
+  DELETE_LIKE_BLOG: `${CONFIG.API_URL}/likes/blogs`,
+  GET_CURRENT_USER_LIKE_BLOG: (userId)=> `${CONFIG.API_URL}/likes/blogs/?userId=${userId}`,
+  GET_CURRENT_USER_BOOKMARK_BLOG: (userId)=> `${CONFIG.API_URL}/saved/?userId=${userId}`,
+
 };
 
 export default API_ENDPOINT;

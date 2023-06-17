@@ -19,7 +19,7 @@ const LandingPage = () => {
             <div className="max-w-xl ">
               <h1 className="text-3xl font-extrabold sm:text-5xl">
                 Pendidikan dimulai dari
-                <strong className="block font-extrabold text-blue-800">
+                <strong className="block font-extrabold text-cyan-600">
                   kita dan untuk kita
                 </strong>
               </h1>
@@ -32,7 +32,7 @@ const LandingPage = () => {
               <div className="mt-8 flex flex-wrap gap-4 text-center">
                 <NavLink
                   to="/home/timeline"
-                  className="block w-full rounded bg-blue-800 px-12 py-3 text-sm font-medium text-white shadow hover:bg-blue-900 transition duration-200  focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
+                  className="block w-full rounded bg-cyan-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-cyan-800 transition duration-200  focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
                 >
                   Jelajahi
                 </NavLink>
