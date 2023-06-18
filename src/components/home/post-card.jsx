@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
-import { createdDate } from "../../utils/helpers";
+// import { createdDate } from "../../utils/helpers";
 
 const PostCard = ({ content }) => {
   const location = useLocation();
@@ -34,7 +34,6 @@ const PostCard = ({ content }) => {
   const avatarImg = author?.avatarImg;
   const name = author?.name;
 
-  console.log(content)
   // const { avatarImg, name } = author;
 
   // console.log(content.post)

@@ -1,7 +1,7 @@
 import {
   MdFavoriteBorder,
-  MdTurnedInNot,
-  MdBookmark,
+  // MdTurnedInNot,
+  // MdBookmark,
   MdOutlineShare,
   MdSend,
   MdFavorite,
@@ -9,11 +9,11 @@ import {
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import API_ENDPOINT from "../../../globals/api-endpoint";
-import Comment from "../comment";
 import useFetch from "../../../hooks/useFetch";
 import { useState } from "react";
 import useGetUser from "../../../hooks/useGetUser";
 import PropTypes from "prop-types";
+import Comments from "../comments";
 
 const DetailBlog = ({ blogId, userId }) => {
   const [commentText, setCommentText] = useState("");
@@ -24,14 +24,16 @@ const DetailBlog = ({ blogId, userId }) => {
     axios.get(API_ENDPOINT.SINGLE_BLOG(blogId))
   );
 
-  // ==================== get saved by current user ====================
-  const { data: dataBlog } = useFetch("getSavedBlogCurrentUser", () =>
-    axios.get(API_ENDPOINT.GET_CURRENT_USER_BOOKMARK_BLOG(userId), {
-      withCredentials: true,
-    })
-  );
+  // ==================== fetch data ====================
+  //**  */
+  // get saved by current user
+  // const { data: dataBlog } = useFetch("getSavedBlogCurrentUser", () =>
+  //   axios.get(API_ENDPOINT.GET_CURRENT_USER_BOOKMARK_BLOG(userId), {
+  //     withCredentials: true,
+  //   })
+  // );
 
-  // ==================== get likes by current user ====================
+  // get likes by current user
   const { data: getLikesBlogByCurrentUser } = useFetch(
     "getLikesBlogCurrentUser",
     () =>
@@ -40,17 +42,30 @@ const DetailBlog = ({ blogId, userId }) => {
       })
   );
 
-  // ==================== check if this post is mine ====================
+  // get comments
+  const { isLoading: isLoadingComments, data: commentsBlog } = useQuery(
+    "getCommentsBlog",
+    () => axios.get(API_ENDPOINT.GET_COMMENT_BLOG(blogId))
+  );
+
+  // check if this post is mine
   const user = useGetUser(userId, "getUserForDetailBlog");
   const isMine = user?.data?.postBlog.map((blog) => blog.id).includes(blogId);
-  const isSaved = dataBlog?.data?.data?.some(
-    (saved) => saved.blogId === blogId
-  );
+  // const isSaved = dataBlog?.data?.data?.some(
+  //   (saved) => saved.blogId === blogId
+  // );
   // compare likes data with current post
-  const isLiked = getLikesBlogByCurrentUser?.data?.like?.some(
+  const isLiked = getLikesBlogByCurrentUser?.data?.likes?.some(
     (like) => like.blogId === blogId
   );
 
+  console.log(isLiked);
+
+  // ** */
+
+  // ==================== mutation ====================
+  //**
+  //***/
   const { mutate: addCommentBlog, isLoading: isLoadingAddCommentBlog } =
     useMutation(
       (payload) =>
@@ -67,42 +82,42 @@ const DetailBlog = ({ blogId, userId }) => {
         },
       }
     );
-  // ==================== add bookmark ====================
-  const { mutate: bookMarkBlog } = useMutation(
-    (payload) =>
-      axios.post(API_ENDPOINT.CREATE_BOOKMARK_BLOG, payload, {
-        withCredentials: true,
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("getBookmarks");
-        queryClient.invalidateQueries("getSavedBlogCurrentUser");
-      },
-    }
-  );
+  //  add bookmark
+  // const { mutate: bookMarkBlog } = useMutation(
+  //   (payload) =>
+  //     axios.post(API_ENDPOINT.CREATE_BOOKMARK_BLOG, payload, {
+  //       withCredentials: true,
+  //     }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries("getBookmarks");
+  //       queryClient.invalidateQueries("getSavedBlogCurrentUser");
+  //     },
+  //   }
+  // );
 
-  // ==================== remove bookmark ====================
-  const { mutate: unBookMarkBlog } = useMutation(
-    () =>
-      axios.delete(API_ENDPOINT.DELETE_BOOKMARK_BLOG, {
-        withCredentials: true,
-        data: {
-          userId: JSON.parse(localStorage.getItem("auth_user")).id,
-          blogId: blogId,
-        },
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("getBookmarks");
-        queryClient.invalidateQueries("getSavedBlogCurrentUser");
-      },
-      onError: (data) => {
-        console.log(data);
-      },
-    }
-  );
+  // // remove bookmark
+  // const { mutate: unBookMarkBlog } = useMutation(
+  //   () =>
+  //     axios.delete(API_ENDPOINT.DELETE_BOOKMARK_BLOG, {
+  //       withCredentials: true,
+  //       data: {
+  //         userId: JSON.parse(localStorage.getItem("auth_user")).id,
+  //         blogId: blogId,
+  //       },
+  //     }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries("getBookmarks");
+  //       queryClient.invalidateQueries("getSavedBlogCurrentUser");
+  //     },
+  //     onError: (data) => {
+  //       console.log(data);
+  //     },
+  //   }
+  // );
 
-  // ==================== add like ====================
+  // add like
   const { mutate: likeBlog } = useMutation(
     (payload) =>
       axios.post(API_ENDPOINT.CREATE_LIKE_BLOG, payload, {
@@ -117,7 +132,7 @@ const DetailBlog = ({ blogId, userId }) => {
     }
   );
 
-  // ==================== remove like ====================
+  // remove like
   const { mutate: unlikeBlog } = useMutation(
     () =>
       axios.delete(API_ENDPOINT.DELETE_LIKE_BLOG, {
@@ -139,29 +154,33 @@ const DetailBlog = ({ blogId, userId }) => {
       },
     }
   );
+  // ** */
 
-  // ==================== function bookmark ====================
-  const handleBookmark = () => {
-    const payload = {
-      userId: JSON.parse(localStorage.getItem("auth_user")).id,
-      blogId: blogId,
-    };
+  // function share
+  //**  */
+  //  function bookmark
+  // const handleBookmark = () => {
+  //   const payload = {
+  //     userId: JSON.parse(localStorage.getItem("auth_user")).id,
+  //     blogId: blogId,
+  //   };
 
-    // ini untuk memanggil function mutation
-    bookMarkBlog(payload);
-  };
+  //   // ini untuk memanggil function mutation
+  //   bookMarkBlog(payload);
+  // };
 
-  // ==================== function unbookmark ====================
-  const handleUnBookmark = () => {
-    const payload = {
-      userId: JSON.parse(localStorage.getItem("auth_user")).id,
-      blogId: blogId,
-    };
+  // // function unbookmark
+  // const handleUnBookmark = () => {
+  //   const payload = {
+  //     userId: JSON.parse(localStorage.getItem("auth_user")).id,
+  //     blogId: blogId,
+  //   };
 
-    // ini untuk memanggil function mutation dari unbookmark
-    unBookMarkBlog(payload);
-  };
+  //   // ini untuk memanggil function mutation dari unbookmark
+  //   unBookMarkBlog(payload);
+  // };
 
+  // function add comment
   const handleAddComment = (e) => {
     e.preventDefault();
     const payload = {
@@ -171,6 +190,7 @@ const DetailBlog = ({ blogId, userId }) => {
     addCommentBlog(payload);
   };
 
+  // function like
   const handleLike = () => {
     const payload = {
       userId: JSON.parse(localStorage.getItem("auth_user")).id,
@@ -179,6 +199,7 @@ const DetailBlog = ({ blogId, userId }) => {
     likeBlog(payload);
   };
 
+  // function unlike
   const handleUnlike = () => {
     const payload = {
       userId: JSON.parse(localStorage.getItem("auth_user")).id,
@@ -186,10 +207,11 @@ const DetailBlog = ({ blogId, userId }) => {
     };
     unlikeBlog(payload);
   };
+  // ** */
 
   if (isLoading) return <h1>Loading...</h1>;
 
-  const { title, createdAt, body, bannerImg, likedCount, savedCount } =
+  const { title, createdAt, body, bannerImg, likedCount } =
     data.data.blog;
   const createdDate = new Date(createdAt).toLocaleDateString("id-ID", {
     weekday: "long",
@@ -247,7 +269,7 @@ const DetailBlog = ({ blogId, userId }) => {
             {likedCount}
           </div>
         )}
-        {isSaved ? (
+        {/* {isSaved ? (
           <span
             className="cursor-pointer  text-2xl transform motion-safe:hover:scale-110"
             onClick={handleUnBookmark}
@@ -259,7 +281,7 @@ const DetailBlog = ({ blogId, userId }) => {
             onClick={handleBookmark}
             className="cursor-pointer text-2xl transform motion-safe:hover:scale-110"
           />
-        )}
+        )} */}
         <MdOutlineShare className="text-2xl transform motion-safe:hover:scale-110" />
         {isMine && (
           <div className="flex gap-3">
@@ -298,7 +320,14 @@ const DetailBlog = ({ blogId, userId }) => {
         </div>
       </form>
 
-      <Comment postId={blogId} />
+      {commentsBlog?.data.comments.map((comment) => (
+        <Comments
+          key={comment.id}
+          comment={comment}
+          isLoading={isLoadingComments}
+        />
+      ))}
+      {/* <Comment postId={blogId} /> */}
     </article>
   );
 };
@@ -307,7 +336,6 @@ const DetailBlog = ({ blogId, userId }) => {
 DetailBlog.propTypes = {
   blogId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
-}
+};
 
 export default DetailBlog;
-

@@ -9,11 +9,13 @@ import {
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import API_ENDPOINT from "../../../globals/api-endpoint";
-import Comment from "../comment";
+// import Comment from "../comment";
 import useFetch from "../../../hooks/useFetch";
 import { useState } from "react";
 import useGetUser from "../../../hooks/useGetUser";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Comments from "../comments";
+import PropTypes from "prop-types";
 
 const DetailPost = ({ postId, userId }) => {
   const [commentText, setCommentText] = useState("");
@@ -42,6 +44,12 @@ const DetailPost = ({ postId, userId }) => {
         withCredentials: true,
       })
   );
+
+  // get this donasi's comments
+  const { data: getCommentsData, isLoading: isLoadingComments } = useFetch("getComments", () =>
+    axios.get(API_ENDPOINT.GET_COMMENT_DONASI(postId))
+  );
+  console.log(getCommentsData?.data);
 
   // ==================== check if this post is mine ====================
   const user = useGetUser(userId, "getUserForDetailDonasi");
@@ -243,7 +251,6 @@ const DetailPost = ({ postId, userId }) => {
     linkForm,
     bannerImg,
     likedCount,
-    savedCount,
   } = data.data.post;
   const createdDate = new Date(createdAt).toLocaleDateString("id-ID", {
     weekday: "long",
@@ -359,9 +366,16 @@ const DetailPost = ({ postId, userId }) => {
         </div>
       </form>
 
-      <Comment postId={postId} />
+      {/* <Comment postId={postId} /> */}
+      
+      {getCommentsData?.data.comments.map((comment) => <Comments key={comment.id} comment={comment} isLoading={isLoadingComments} />)}
     </article>
   );
 };
+
+DetailPost.propTypes = {
+  postId: PropTypes.string,
+  userId: PropTypes.string,
+}
 
 export default DetailPost;

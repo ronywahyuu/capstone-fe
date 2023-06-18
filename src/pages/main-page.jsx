@@ -44,14 +44,14 @@ const MainPage = () => {
     JSON.parse(localStorage.getItem("auth_user"))?.id,
     "savedDonasiData"
   );
-  const savedPosts = savedDonasiData?.savedPost
+  const savedPosts = savedDonasiData?.savedPost;
   // console.log(savedPosts)
 
-  const { data: savedBlogData } = useGetUser(
-    JSON.parse(localStorage.getItem("auth_user"))?.id,
-    "savedBlogData"
-  );
-  const savedBlogs = savedBlogData?.savedBlog
+  // const { data: savedBlogData } = useGetUser(
+  //   JSON.parse(localStorage.getItem("auth_user"))?.id,
+  //   "savedBlogData"
+  // );
+  // const savedBlogs = savedBlogData?.savedBlog;
 
   // const blogsMap = savedBlogs?.map((blog) => blog.blog)
 
@@ -68,10 +68,14 @@ const MainPage = () => {
     ? allBlogs?.map((post) => <PostCard key={post.id} content={post} />)
     : yourBlog?.map((post) => <PostCard key={post.id} content={post} />);
 
-    // const renderSaved = <div>af</div>
-  const renderSaved = forYou 
-    ? savedPosts?.map((post) => <PostCard key={post.id} content={post} />)
-    : savedBlogs?.map((blog) => <PostCard key={blog.blog.id} content={blog.blog} />);
+  // const renderSaved = <div>af</div>
+  // const renderSaved = forYou
+  //   ? savedPosts?.map((post) => <PostCard key={post.id} content={post} />)
+  //   : savedBlogs?.map((blog) => <PostCard key={blog.blog.id} content={blog.blog} />);
+
+  const renderSaved =
+    forYou &&
+    savedPosts?.map((post) => <PostCard key={post.id} content={post} />);
   // ==================== render content berdasarkan pathname pada url ====================
   // **
   // **
@@ -136,8 +140,7 @@ const MainPage = () => {
           <Tabbed
             forYou={forYou}
             setForYou={setForYou}
-            text1="Donasi"
-            text2="Blog"
+            text1="Donasi tersimpan"
           />
         )}
 
@@ -158,10 +161,7 @@ const MainPage = () => {
         </div>
       </div>
       {showButton && <ButtonToUp />}
-      <Modal 
-        show={showButton}
-        setShow={setShowButton}
-      />
+      <Modal show={showButton} setShow={setShowButton} />
     </div>
   );
 };
