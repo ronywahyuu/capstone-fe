@@ -2,13 +2,16 @@ import axios from "axios";
 import API_ENDPOINT from "../../globals/api-endpoint";
 import PropTypes from "prop-types";
 import {  useQuery } from "react-query";
+// import { useLocation } from "react-router-dom";
 
 const Comment = ({ postId }) => {
   // get comments
+  // const location = useLocation();
   const { isLoading: isLoadingComments, data: comments } = useQuery(
     "getComments",
     () => axios.get(API_ENDPOINT.GET_COMMENT_DONASI(postId))
-  );
+    );
+
 
 
   const formattedDate = (date) => {
