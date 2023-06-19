@@ -215,7 +215,7 @@ const WritePost = () => {
                       errors.title && "border-red-500"
                     } p-4 pe-12 text-sm shadow-sm`}
                     placeholder="Deskripsi"
-                    rows="1"
+                    rows="10"
                     id="deskripsi"
                     defaultValue={
                       editPath
@@ -252,9 +252,11 @@ const WritePost = () => {
                     })}
                   />
                 </div>
+                <span className="text-sm text-gray-600">Referensi: https://forms.gle/AM1GREAJHr5aEUTB8</span>
               </div>
 
               <div>
+                <p className="text-sm text-gray-600">Banner image</p>
                 <label className="sr-only">Upload file</label>
                 <div className="relative">
                   <input
@@ -353,14 +355,14 @@ const WritePost = () => {
             </div>
 
             <div>
-              <label className="sr-only">Deskripsi</label>
+              <label className="sr-only">Body</label>
               <div className="relative">
                 <textarea
                   className={`w-full rounded-lg border-gray-200 ${
                     errors.title && "border-red-500"
                   } p-4 pe-12 text-sm shadow-sm`}
-                  placeholder="Deskripsi"
-                  rows="1"
+                  placeholder="Body"
+                  rows="10"
                   id="deskripsi"
                   {...register("body", { required: true })}
                 />

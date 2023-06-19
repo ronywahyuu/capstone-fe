@@ -283,7 +283,7 @@ const DetailBlog = ({ blogId, userId }) => {
           />
         )} */}
         <MdOutlineShare className="text-2xl transform motion-safe:hover:scale-110" />
-        {isMine && (
+        {/* {isMine && (
           <div className="flex gap-3">
             <button className="bg-red-500 text-white px-4 py-2 rounded-md">
               Hapus
@@ -292,7 +292,7 @@ const DetailBlog = ({ blogId, userId }) => {
               Edit
             </button>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* form komentar */}
